@@ -20,11 +20,11 @@ export default function Layout({
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <html lang="en" className="h-full bg-[#E8EAF6]">
+        <html lang="en">
           <title>Gerenciamento de Biblioteca</title>
           <body>
-            <div className="flex min-h-screen w-full flex-col bg-muted/40">
-              <main className="flex w-full">
+            <div className="">
+              <main className='flex w-full min-h-screen'>
                 {children}
               </main>
               <Toaster />
