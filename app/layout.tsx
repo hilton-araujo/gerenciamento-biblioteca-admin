@@ -1,38 +1,37 @@
 'use client'
-import localFont from "next/font/local";
-import { MantineProvider } from "@mantine/core";
-import "./globals.css";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import './globals.css'
+import * as React from "react"
+import {
+  TooltipProvider,
+} from "@/components/ui/tooltip"
+import {
+  QueryClient,
+  QueryClientProvider,
+} from '@tanstack/react-query'
+import { Toaster } from "@/components/ui/toaster"
 
-const geistSans = localFont({
-  src: "./fonts/GeistVF.woff",
-  variable: "--font-geist-sans",
-  weight: "100 900",
-});
-const geistMono = localFont({
-  src: "./fonts/GeistMonoVF.woff",
-  variable: "--font-geist-mono",
-  weight: "100 900",
-});
-
-export default function RootLayout({
-  children,
-}: Readonly<{
+export default function Layout({
+  children
+}: {
   children: React.ReactNode;
-}>) {
+}) {
+  const queryClient = new QueryClient()
 
-  const queryClient = new QueryClient();
   return (
-
     <QueryClientProvider client={queryClient}>
-      <title>Biblioteca Admin</title>
-      <html lang="en">
-        <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
-          <MantineProvider>
-            {children}
-          </MantineProvider>
-        </body>
-      </html>
+      <TooltipProvider>
+        <html lang="en" className="h-full bg-[#E8EAF6]">
+          <title>Gerenciamento de Biblioteca</title>
+          <body>
+            <div className="flex min-h-screen w-full flex-col bg-muted/40">
+              <main className="flex w-full">
+                {children}
+              </main>
+              <Toaster />
+            </div>
+          </body>
+        </html>
+      </TooltipProvider>
     </QueryClientProvider>
-  );
+  )
 }
