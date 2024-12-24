@@ -1,6 +1,6 @@
 import React from 'react'
 import { CardContent } from '../ui/card'
-import { MenuItem, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { useGet, usePost } from '@/data/hooks'
@@ -43,13 +43,13 @@ const AddCategorieForm = () => {
     })
 
     const addBookSchema = Yup.object().shape({
-        genero: Yup.string().required('A designação do genero e obrigátoria'),
+        category: Yup.string().required('A designação do category e obrigátoria'),
     });
 
 
     const AddCategorieFormik = useFormik({
         initialValues: {
-            genero: "",
+            category: "",
         },
         validationSchema: addBookSchema,
         onSubmit: (values) => {
@@ -74,15 +74,15 @@ const AddCategorieForm = () => {
                                         id="outlined-basic"
                                         size="small"
                                         fullWidth
-                                        label="Genero"
-                                        placeholder='Genero'
+                                        label="Categoria"
+                                        placeholder='Categoria'
                                         variant="outlined"
-                                        name='genero'
-                                        value={AddCategorieFormik.values.genero}
+                                        name='category'
+                                        value={AddCategorieFormik.values.category}
                                         onChange={AddCategorieFormik.handleChange}
                                         onBlur={AddCategorieFormik.handleBlur}
-                                        error={AddCategorieFormik.touched.genero && Boolean(AddCategorieFormik.errors.genero)}
-                                        helperText={AddCategorieFormik.touched.genero && AddCategorieFormik.errors.genero}
+                                        error={AddCategorieFormik.touched.category && Boolean(AddCategorieFormik.errors.category)}
+                                        helperText={AddCategorieFormik.touched.category && AddCategorieFormik.errors.category}
                                     />
                                 </div>
                             </div>

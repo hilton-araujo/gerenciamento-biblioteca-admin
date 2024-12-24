@@ -12,7 +12,7 @@ type Props = {
 }
 
 const columns = [
-    { name: "Código", uid: "id" },
+    { name: "Código", uid: "code" },
     { name: "Genero", uid: "title" },
     { name: "Ações", uid: "actions" },
 ];
@@ -40,7 +40,7 @@ const CategoryTable = ({ categories, isLoading }: Props) => {
     };
 
     const filteredCategories = categories.filter((book: Category) =>
-        (book.genero?.toLowerCase().includes(searchTerm) ?? false)
+        (book.category?.toLowerCase().includes(searchTerm) ?? false)
     );
 
     const paginatedCategories = filteredCategories.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
@@ -79,8 +79,8 @@ const CategoryTable = ({ categories, isLoading }: Props) => {
                             paginatedCategories?.length > 0 ? (
                                 paginatedCategories?.map((genero: Category) => (
                                     <TableRow key={genero.id} className="hover:bg-gray-50">
-                                        <TableCell>{genero.id}</TableCell>
-                                        <TableCell>{genero.genero}</TableCell>
+                                        <TableCell>{genero.code}</TableCell>
+                                        <TableCell>{genero.category}</TableCell>
                                         <TableCell className='flex justify-end'>
                                             <div className="flex items-center gap-2">
                                                 <IconButton className="text-green-500 hover:text-green-700">
@@ -88,7 +88,7 @@ const CategoryTable = ({ categories, isLoading }: Props) => {
                                                 </IconButton>
 
                                                 <IconButton
-                                                    onClick={() => navigate.push(`/admin/category/${genero.id}`)}
+                                                    onClick={() => navigate.push(`/admin/category/${genero.code}`)}
                                                     className="text-blue-500 hover:text-blue-700"
                                                 >
                                                     <FileEdit size={18} />

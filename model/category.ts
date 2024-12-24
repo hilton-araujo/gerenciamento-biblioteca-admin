@@ -1,4 +1,5 @@
 export interface Category {
     id: string
-    genero: string
+    code: string
+    category: string
 }

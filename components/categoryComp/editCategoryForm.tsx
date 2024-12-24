@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 import { CardContent } from '../ui/card'
 import { TextField } from '@mui/material'
 import { Button } from '../ui/button'
@@ -49,20 +49,24 @@ const EditCategoryForm = ({ category, categoryId }: Props) => {
     })
 
     const editBookSchema = Yup.object().shape({
-        genero: Yup.string().required('A designação do genero e obrigátoria'),
+        category: Yup.string().required('A designação da categoria e obrigátoria'),
     });
 
 
     const EditCategorieFormik = useFormik({
         initialValues: {
-            id: categoryId || "",
-            genero: category?.genero || "",
+            code: categoryId || "",
+            category: category?.category || "",
         },
         validationSchema: editBookSchema,
         onSubmit: (values) => {
             put(values)
         },
     })
+
+    useEffect(() => {
+        EditCategorieFormik.setFieldValue("category", category?.category || "");
+    }, [category])
 
     return (
         <div className="grid  w-full lg:gap-8">
@@ -76,15 +80,15 @@ const EditCategoryForm = ({ category, categoryId }: Props) => {
                                         id="outlined-basic"
                                         size="small"
                                         fullWidth
-                                        label="Genero"
-                                        placeholder='Genero'
+                                        label="Categoria"
+                                        placeholder='Categoria'
                                         variant="outlined"
-                                        name='genero'
-                                        value={EditCategorieFormik.values.genero}
+                                        name='category'
+                                        value={EditCategorieFormik.values.category}
                                         onChange={EditCategorieFormik.handleChange}
                                         onBlur={EditCategorieFormik.handleBlur}
-                                        error={EditCategorieFormik.touched.genero && Boolean(EditCategorieFormik.errors.genero)}
-                                        helperText={EditCategorieFormik.touched.genero && EditCategorieFormik.errors.genero}
+                                        error={EditCategorieFormik.touched.category && Boolean(EditCategorieFormik.errors.category)}
+                                        helperText={EditCategorieFormik.touched.category && EditCategorieFormik.errors.category}
                                     />
                                 </div>
                             </div>
