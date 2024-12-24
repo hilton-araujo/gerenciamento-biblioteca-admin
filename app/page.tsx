@@ -75,7 +75,7 @@ const Home = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4">
+    <div className="flex w-full h-screen justify-center items-center px-10 md:px-2">
       <div className="w-full max-w-md">
         <div className="bg-white shadow-xl rounded-2xl overflow-hidden">
           <div className="bg-gradient-to-r from-indigo-700 to-purple-800 text-white p-6 text-center">
