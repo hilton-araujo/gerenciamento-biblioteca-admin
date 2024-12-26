@@ -1,18 +1,20 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import { CardContent } from '../ui/card'
 import { MenuItem, TextField } from '@mui/material'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
-import { useGet, usePost, usePut } from '@/data/hooks'
+import { useGet, usePut } from '@/data/hooks'
 import { API_ENDPOINTS } from '@/data/client/endpoint'
-import { useFormik } from 'formik'
+import { FormikProps, useFormik } from 'formik'
 import { toast } from '@/hooks/use-toast'
 import { ReloadIcon } from "@radix-ui/react-icons";
 import * as Yup from 'yup'
+import { Category } from '@/model/category'
 
 interface Props {
     bookId: string
 }
+
 const EditBookForm = ({ bookId }: Props) => {
     const navigate = useRouter();
 
@@ -25,10 +27,6 @@ const EditBookForm = ({ bookId }: Props) => {
         endpoint: API_ENDPOINTS.GET_CATEGORIES
     })
     const categories = data?.data ?? []
-
-    const findCategory = (genero: string) => {
-        return categories.find((category: any) => category.genero === genero)?.id
-    }
 
     const handleSuccess = (data: any) => {
         toast({
@@ -60,27 +58,37 @@ const EditBookForm = ({ bookId }: Props) => {
     })
 
     const editBookSchema = Yup.object({
-        titulo: Yup.string().required('O título é obrigatório'),
-        autor: Yup.string().required('O autor é obrigatório'),
-        generoId: Yup.string().required('O gênero é obrigatório'),
-        publishYear: Yup.number().required('O ano de publicação é obrigatório'),
-        pageCount: Yup.number().required('A quantidade de páginas é obrigatória'),
-        availableQuantity: Yup.number().required('A quantidade disponível é obrigatória'),
-        image: Yup.string().url('Insira uma URL válida'),
+        title: Yup.string().required("Título é obrigatório"),
+        author: Yup.string().required("Autor é obrigatório"),
+        publisher: Yup.string().required("Editora é obrigatório"),
+        language: Yup.string().required("Idioma é obrigatório"),
+        location: Yup.string().required("Local é obrigatório"),
+        description: Yup.string().required("Descrição é obrigatória"),
+        availableQuantity: Yup.number().required("Quantidade disponível é obrigatória"),
+        pageCount: Yup.number().required("Número de páginas é obrigatório"),
+        publishYear: Yup.number().required("Ano de publicação é obrigatório"),
+        rating: Yup.number().required("Avaliação é obrigatória"),
+        categoryCode: Yup.string().required("Categoria é obrigatória"),
+        image: Yup.string().required("Imagem é obrigatória"),
     });
 
     const editBookFormik = useFormik({
         enableReinitialize: true,
         initialValues: {
-            id: bookId,
-            titulo: book?.title || "",
-            autor: book?.author || "",
-            generoId: findCategory(book?.genre || "") || "",
+            code: bookId,
+            title: book?.title || "",
+            author: book?.author || "",
+            categoryCode: book?.categoryCode || "",
+            isbn: book?.isbn || "",
             image: book?.image || "",
             description: book?.description || "",
-            publishYear: book?.publishYear || 0,
-            pageCount: book?.pageCount || 0,
-            availableQuantity: book?.availableQuantity || 0
+            publishYear: book?.publishYear || null,
+            pageCount: book?.pageCount || null,
+            availableQuantity: book?.availableQuantity || null,
+            publisher: book?.publisher || "",
+            language: book?.language || "",
+            location: book?.location || "",
+            rating: book?.rating || null,
         },
         validationSchema: editBookSchema,
         onSubmit: (values) => {
@@ -96,127 +104,44 @@ const EditBookForm = ({ bookId }: Props) => {
                         <CardContent>
                             <div className="flex flex-col gap-2">
                                 <div className="flex flex-row gap-3">
-                                    <TextField
-                                        id="outlined-basic"
-                                        size="small"
-                                        fullWidth
-                                        label="Título"
-                                        placeholder='Digite o titulo do livro'
-                                        variant="outlined"
-                                        name='titulo'
-                                        value={editBookFormik.values.titulo}
-                                        onChange={editBookFormik.handleChange}
-                                        onBlur={editBookFormik.handleBlur}
-                                        error={editBookFormik.touched.titulo && Boolean(editBookFormik.errors.titulo)}
-                                        helperText={editBookFormik.touched.titulo && Boolean(editBookFormik.errors.titulo)}
-                                    />
-                                    <TextField
-                                        id="outlined-basic"
-                                        size="small"
-                                        fullWidth
-                                        label="Autor"
-                                        placeholder='Digite o autor do livro'
-                                        variant="outlined"
-                                        name='autor'
-                                        value={editBookFormik.values.autor}
-                                        onChange={editBookFormik.handleChange}
-                                        onBlur={editBookFormik.handleBlur}
-                                        error={editBookFormik.touched.autor && Boolean(editBookFormik.errors.autor)}
-                                        helperText={editBookFormik.touched.autor && Boolean(editBookFormik.errors.autor)}
-                                    />
+                                    <TextField {...generateFieldProps(editBookFormik, 'title', 'Título', 'Digite o título do livro')} />
+                                    <TextField {...generateFieldProps(editBookFormik, 'author', 'Autor', 'Digite o autor do livro')} />
+                                </div>
+
+                                <div className="flex flex-row gap-3">
+                                    <TextField {...generateFieldProps(editBookFormik, 'publisher', 'Editora', 'Digite a editora do livro')} />
+                                    <TextField {...generateFieldProps(editBookFormik, 'language', 'Idioma', 'Digite o idioma do livro')} />
+                                    <TextField {...generateFieldProps(editBookFormik, 'location', 'Local', 'Digite o local do livro')} />
                                 </div>
 
                                 <div className="flex flex-row gap-3">
                                     <TextField
-                                        id="outlined-basic"
-                                        size="small"
-                                        fullWidth
+                                        {...generateFieldProps(editBookFormik, 'categoryCode', 'Gênero', 'Selecione o gênero do livro')}
                                         select
-                                        label="Genero"
-                                        placeholder='Digite o genero do livro'
-                                        variant="outlined"
-                                        name='generoId'
-                                        value={editBookFormik.values.generoId}
-                                        onChange={editBookFormik.handleChange}
-                                        onBlur={editBookFormik.handleBlur}
-                                        error={editBookFormik.touched.generoId && Boolean(editBookFormik.errors.generoId)}
-                                        helperText={editBookFormik.touched.generoId && Boolean(editBookFormik.errors.generoId)}
                                     >
-                                        {categories?.map((category: any) => (
-                                            <MenuItem key={category.id} value={category.id}>
-                                                {category.genero}
+                                        {categories.map((category: Category) => (
+                                            <MenuItem key={category.code} value={category.code}>
+                                                {category.category}
                                             </MenuItem>
                                         ))}
                                     </TextField>
-
-                                    <TextField
-                                        id="outlined-basic"
-                                        size="small"
-                                        fullWidth
-                                        label="Ano de Publicação"
-                                        placeholder='Digite o ano de publicação do livro'
-                                        variant="outlined"
-                                        name='publishYear'
-                                        value={editBookFormik.values.publishYear}
-                                        onChange={editBookFormik.handleChange}
-                                        onBlur={editBookFormik.handleBlur}
-                                        error={editBookFormik.touched.image && Boolean(editBookFormik.errors.publishYear)}
-                                        helperText={editBookFormik.touched.image && Boolean(editBookFormik.errors.publishYear)}
-                                    />
-
-                                    <TextField
-                                        id="outlined-basic"
-                                        size="small"
-                                        fullWidth
-                                        label="Quantidade de Páginas"
-                                        placeholder='Digite a quantidade de páginas do livro'
-                                        variant="outlined"
-                                        name='pageCount'
-                                        value={editBookFormik.values.pageCount}
-                                        onChange={editBookFormik.handleChange}
-                                        onBlur={editBookFormik.handleBlur}
-                                        error={editBookFormik.touched.image && Boolean(editBookFormik.errors.pageCount)}
-                                        helperText={editBookFormik.touched.image && Boolean(editBookFormik.errors.pageCount)}
-                                    />
+                                    <TextField {...generateFieldProps(editBookFormik, 'publishYear', 'Ano de Publicação', 'Digite o ano de publicação do livro', 'number')} />
                                 </div>
 
                                 <div className="flex flex-row gap-3">
-                                    <TextField
-                                        id="outlined-basic"
-                                        size="small"
-                                        fullWidth
-                                        label="Quantidede disponível"
-                                        placeholder='Digite a quantidade disponível do livro'
-                                        variant="outlined"
-                                        name='availableQuantity'
-                                        value={editBookFormik.values.availableQuantity}
-                                        onChange={editBookFormik.handleChange}
-                                        onBlur={editBookFormik.handleBlur}
-                                        error={editBookFormik.touched.image && Boolean(editBookFormik.errors.availableQuantity)}
-                                        helperText={editBookFormik.touched.image && Boolean(editBookFormik.errors.availableQuantity)}
-                                    />
+                                    <TextField {...generateFieldProps(editBookFormik, 'pageCount', 'Número de Páginas', 'Digite o número de páginas do livro', 'number')} />
+                                    <TextField {...generateFieldProps(editBookFormik, 'availableQuantity', 'Quantidade Disponível', 'Digite a quantidade disponível', 'number')} />
+                                    <TextField {...generateFieldProps(editBookFormik, 'rating', 'Avaliação', 'Digite a avaliação do livro', 'number')} />
+                                </div>
 
-                                    <TextField
-                                        id="outlined-basic"
-                                        size="small"
-                                        fullWidth
-                                        label="Imagem"
-                                        placeholder='Insira a url da imagem do livro'
-                                        variant="outlined"
-                                        name='image'
-                                        value={editBookFormik.values.image}
-                                        onChange={editBookFormik.handleChange}
-                                        onBlur={editBookFormik.handleBlur}
-                                        error={editBookFormik.touched.image && Boolean(editBookFormik.errors.image)}
-                                        helperText={editBookFormik.touched.image && Boolean(editBookFormik.errors.image)}
-                                    />
+                                <div className="flex flex-row gap-3">
+                                    <TextField {...generateFieldProps(editBookFormik, 'image', 'Imagem', 'Digite a URL da imagem do livro')} />
                                 </div>
 
                                 <textarea
-                                    id="outlined-basic"
-                                    placeholder='Digite a descricao do livro'
-                                    className='w-full h-24 rounded-md border border-gray-300 p-2'
-                                    name='description'
+                                    className="w-full h-24 rounded-md border border-gray-300 p-2"
+                                    placeholder="Digite a descrição do livro"
+                                    name="description"
                                     value={editBookFormik.values.description}
                                     onChange={editBookFormik.handleChange}
                                     onBlur={editBookFormik.handleBlur}
@@ -245,6 +170,32 @@ const EditBookForm = ({ bookId }: Props) => {
             </div>
         </div>
     )
+}
+
+function generateFieldProps(
+    formik: FormikProps<any>,
+    name: string,
+    label: string,
+    placeholder: string,
+    type: 'text' | 'number' | 'password' | 'email' = 'text'
+) {
+    return {
+        id: name,
+        name,
+        label,
+        placeholder,
+        type,
+        size: 'small' as const,
+        fullWidth: true,
+        variant: 'outlined' as const,
+        value: formik.values[name],
+        onChange: formik.handleChange,
+        onBlur: formik.handleBlur,
+        error: formik.touched[name] && Boolean(formik.errors[name]),
+        helperText: formik.touched[name] && typeof formik.errors[name] === 'string'
+            ? formik.errors[name]
+            : undefined,
+    };
 }
 
 export default EditBookForm

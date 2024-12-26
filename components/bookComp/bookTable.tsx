@@ -13,11 +13,14 @@ type Props = {
 
 const columns = [
     { name: "Código", uid: "id" },
+    { name: "Isbn", uid: "isbn" },
     { name: "Título", uid: "title" },
     { name: "Autor", uid: "author" },
     { name: "Gênero", uid: "genre" },
+    { name: "Editora", uid: "publisher" },
     { name: "Ano de Publicação", uid: "publishYear" },
     { name: "Quantidade Disponível", uid: "availableQuantity" },
+    { name: "Status", uid: "active" },
     { name: "Ações", uid: "actions" },
 ];
 
@@ -44,6 +47,7 @@ const BookTable = ({ books, isLoading }: Props) => {
     };
 
     const filteredBooks = books.filter((book: Book) =>
+        (book.code?.includes(searchTerm) ?? false) ||
         (book.title?.toLowerCase().includes(searchTerm) ?? false) ||
         (book?.author?.toLowerCase().includes(searchTerm) ?? false)
     );
@@ -83,21 +87,32 @@ const BookTable = ({ books, isLoading }: Props) => {
                         ) : (
                             paginatedBooks?.length > 0 ? (
                                 paginatedBooks?.map((book: Book) => (
-                                    <TableRow key={book.id} className="hover:bg-gray-50">
-                                        <TableCell>{book.id}</TableCell>
+                                    <TableRow key={book.code} className="hover:bg-gray-50">
+                                        <TableCell>{book.code}</TableCell>
+                                        <TableCell>{book.isbn}</TableCell>
                                         <TableCell>{book.title}</TableCell>
                                         <TableCell>{book.author}</TableCell>
-                                        <TableCell>{book.genre}</TableCell>
+                                        <TableCell>{book.category}</TableCell>
+                                        <TableCell>{book.publisher}</TableCell>
                                         <TableCell>{book.publishYear}</TableCell>
                                         <TableCell>{book.availableQuantity}</TableCell>
+                                        <TableCell>
+                                            <span
+                                                className={`px-2 py-1 rounded-full text-white text-sm ${book.active
+                                                    ? "bg-green-500"
+                                                    : "bg-red-500"
+                                                    }`}
+                                            >
+                                                {book.active ? "Ativo" : "Inativo"}
+                                            </span>
+                                        </TableCell>
                                         <TableCell>
                                             <div className="flex items-center gap-2">
                                                 <IconButton className="text-green-500 hover:text-green-700">
                                                     <Eye size={18} />
                                                 </IconButton>
-
                                                 <IconButton
-                                                    onClick={() => navigate.push(`/admin/book/${book.id}`)}
+                                                    onClick={() => navigate.push(`/admin/book/${book.code}`)}
                                                     className="text-blue-500 hover:text-blue-700"
                                                 >
                                                     <FileEdit size={18} />
@@ -118,6 +133,7 @@ const BookTable = ({ books, isLoading }: Props) => {
                             )
                         )}
                     </TableBody>
+
                 </Table>
             </TableContainer>
         </div>
