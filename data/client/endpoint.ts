@@ -8,7 +8,7 @@ export const API_ENDPOINTS = {
     //GET COM PARAMETROS
     GET_BOOK_BY_ID: (id: string) => `/book/${id}`,
     GET_CATEGORY_BY_ID: (code: string) => `/category/${code}`,
-    GET_CLIENT_BY_CODE: (code: string) => `/client/${code}`,
+    GET_CLIENT_BY_NUIT: (code: string) => `/client/${code}`,
 
     //POST
     ADD_BOOK: `/book`,

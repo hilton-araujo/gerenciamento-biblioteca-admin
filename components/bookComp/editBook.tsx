@@ -63,7 +63,6 @@ const EditBookForm = ({ bookId }: Props) => {
         publisher: Yup.string().required("Editora é obrigatório"),
         language: Yup.string().required("Idioma é obrigatório"),
         location: Yup.string().required("Local é obrigatório"),
-        description: Yup.string().required("Descrição é obrigatória"),
         availableQuantity: Yup.number().required("Quantidade disponível é obrigatória"),
         pageCount: Yup.number().required("Número de páginas é obrigatório"),
         publishYear: Yup.number().required("Ano de publicação é obrigatório"),

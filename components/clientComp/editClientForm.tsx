@@ -12,11 +12,11 @@ import { generateFieldProps } from '../generateFieldProps';
 import { Client } from '@/model/client';
 
 interface ClientProps {
-    clientCode: string
+    clientNuit: string
     client: Client
 }
 
-const EditClientForm = ({ clientCode, client }: ClientProps) => {
+const EditClientForm = ({ clientNuit, client }: ClientProps) => {
     const navigate = useRouter();
 
     const handleSuccess = (data: any) => {
@@ -58,9 +58,10 @@ const EditClientForm = ({ clientCode, client }: ClientProps) => {
 
     const editClientFormik = useFormik({
         initialValues: {
+            code: client?.code ?? '',
             name: client?.name ?? '',
             surname: client?.surname ?? '',
-            nuit: client?.nuit ?? '',
+            nuit: clientNuit ?? '',
             email: client?.email ?? '',
             phone: client?.phone ?? '',
             address: client?.address ?? '',
@@ -75,17 +76,17 @@ const EditClientForm = ({ clientCode, client }: ClientProps) => {
     });
 
     useEffect(() => {
-        editClientFormik?.setFieldValue('code', clientCode ?? '');
+        editClientFormik?.setFieldValue('code', clientNuit ?? '');
         editClientFormik?.setFieldValue('name', client?.name ?? '');
         editClientFormik?.setFieldValue('surname', client?.surname ?? '');
-        editClientFormik?.setFieldValue('nuit', client?.nuit ?? '');
+        editClientFormik?.setFieldValue('nuit', clientNuit ?? '');
         editClientFormik?.setFieldValue('email', client?.email ?? '');
         editClientFormik?.setFieldValue('phone', client?.phone ?? '');
         editClientFormik?.setFieldValue('address', client?.address ?? '');
         editClientFormik?.setFieldValue('city', client?.city ?? '');
         editClientFormik?.setFieldValue('postalCode', client?.postalCode ?? '');
         editClientFormik?.setFieldValue('documentNumber', client?.documentNumber ?? '');
-    }, [client, clientCode]);
+    }, [client, clientNuit]);
 
     return (
         <div className="grid w-full lg:gap-8">

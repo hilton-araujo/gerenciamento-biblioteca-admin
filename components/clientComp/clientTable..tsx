@@ -114,7 +114,7 @@ const ClientTable = ({ clients, isLoading }: Props) => {
                                                     <Eye size={18} />
                                                 </IconButton>
                                                 <IconButton
-                                                    onClick={() => navigate.push(`/admin/client/${client.code}`)}
+                                                    onClick={() => navigate.push(`/admin/client/${client?.nuit}`)}
                                                     className="text-blue-500 hover:text-blue-700"
                                                 >
                                                     <FileEdit size={18} />

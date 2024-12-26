@@ -9,10 +9,10 @@ import React from 'react'
 
 const EditClientPage = () => {
 
-    const { code } = useParams()
+    const { nuit } = useParams()
 
     const { data } = useGet({
-        endpoint: API_ENDPOINTS.GET_CLIENT_BY_CODE(code as string)
+        endpoint: API_ENDPOINTS.GET_CLIENT_BY_NUIT(nuit as string)
     })
 
     const client = data?.data ?? {} as Client
@@ -28,7 +28,7 @@ const EditClientPage = () => {
                         buttons={false}
                     />
 
-                    <EditClientForm clientCode={code as string} client={client} />
+                    <EditClientForm clientNuit={nuit as string} client={client} />
                 </main>
             </div>
         </div>
