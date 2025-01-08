@@ -2,6 +2,7 @@ import {
     Book,
     FileBarChart,
     Home,
+    Plus,
     Users,
 } from "lucide-react";
 
@@ -25,5 +26,10 @@ export const navbarConfig = [
         title: "Livro",
         href: "/admin/book",
         icon: <Book className="h-5 w-5" />,
+    },
+    {
+        title: "Workflow",
+        href: "/admin/workflow",
+        icon: <Plus className="h-5 w-5" />,
     },
 ];

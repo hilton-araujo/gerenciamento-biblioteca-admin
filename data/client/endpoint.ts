@@ -4,6 +4,10 @@ export const API_ENDPOINTS = {
     GET_BOOKS: "/book",
     GET_CATEGORIES: "/category",
     GET_CLIENTS: "/client",
+    GET_WORKFLOW: "/workflow",
+
+    //Enums
+    GET_ORDER_TYPE: "/order-type",
 
     //GET COM PARAMETROS
     GET_BOOK_BY_ID: (id: string) => `/book/${id}`,
@@ -15,6 +19,7 @@ export const API_ENDPOINTS = {
     LOGIN: `/login`,
     ADD_CATEGORIES: `/category`,
     ADD_CLIENT: `/client`,
+    ADD_WORKFLOW: `/workflow`,
 
     //PUT
     EDI_CATEGORY: `/category`,
