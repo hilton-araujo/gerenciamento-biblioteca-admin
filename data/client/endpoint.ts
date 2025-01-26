@@ -5,9 +5,11 @@ export const API_ENDPOINTS = {
     GET_CATEGORIES: "/category",
     GET_CLIENTS: "/client",
     GET_WORKFLOW: "/workflow",
+    GET_EMPLOYEES: "/employee",
 
     //Enums
     GET_ORDER_TYPE: "/order-type",
+    DOCUMENTS_TYPES: "/enums/document-type",
 
     //GET COM PARAMETROS
     GET_BOOK_BY_ID: (id: string) => `/book/${id}`,
