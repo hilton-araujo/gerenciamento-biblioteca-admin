@@ -13,6 +13,11 @@ export const navbarConfig = [
         icon: <Home className="h-5 w-5" />,
     },
     {
+        title: "Funcionário",
+        href: "/admin/employee",
+        icon: <Users className="h-5 w-5" />,
+    },
+    {
         title: "Cliente",
         href: "/admin/client",
         icon: <Users className="h-5 w-5" />,
