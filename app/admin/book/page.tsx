@@ -11,11 +11,7 @@ const BookPage = () => {
     })
     const books = data?.data ?? []
 
-    return (
-        <>
-            <ListBook props={books} isLoading={isLoading} />
-        </>
-    )
+    return <ListBook props={books} isLoading={isLoading} />
 }
 
 export default BookPage

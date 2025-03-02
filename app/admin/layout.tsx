@@ -1,25 +1,25 @@
 "use client";
-import * as React from "react";
-import { SidebarProvider } from "@/components/ui/sidebar";
-import { AppSidebar } from "@/components/app-sidebar";
-import { useAtom } from "jotai";
-import { isSidebarOpen } from "@/atom/application-atoms";
-import AppHeader from "@/components/app-header";
+import { LibrarySidebar } from "@/components/library-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 
-export default function Layout({ children }: { children: React.ReactNode }) {
-    const [navbarOpen, setNavbarOpen] = useAtom(isSidebarOpen)
+interface DashboardLayoutProps {
+    children: React.ReactNode;
+}
 
+export default function Layout({ children }: DashboardLayoutProps) {
     return (
-        <SidebarProvider open={navbarOpen} onOpenChange={(open) => setNavbarOpen(open)}>
-            <AppSidebar />
-            <main className="w-full">
-                <div className="flex flex-col w-full">
-                    <AppHeader />
-                    <div className="w-full">
+        <SidebarProvider className="min-h-screen">
+            <div className="flex w-full min-h-screen">
+                <LibrarySidebar />
+                <div className="flex flex-col flex-1">
+                    <header className="flex items-center px-4 border-b h-14 lg:px-6">
+                        <SidebarTrigger />
+                    </header>
+                    <main className="flex-1 p-4 overflow-auto lg:p-6">
                         {children}
-                    </div>
+                    </main>
                 </div>
-            </main>
+            </div>
         </SidebarProvider>
     );
 }
