@@ -75,9 +75,9 @@ const WorkflowComp = () => {
         <>
             {view === "list" && (
                 <>
-                    <div className="flex flex-row items-center gap-4 bg-gray-100 p-2 rounded-md">
+                    <div className="flex flex-row items-center gap-4 p-2 bg-gray-100 rounded-md">
                         <div className="flex flex-col flex-1">
-                            <div className='mb-2 flex items-center'>
+                            <div className='flex items-center mb-2'>
                                 <TextField
                                     id="order_type_code"
                                     size="small"
@@ -114,9 +114,9 @@ const WorkflowComp = () => {
 
             {view === "add" && (
                 <>
-                    <div className="flex flex-row items-center gap-4 bg-gray-100 p-2 rounded-md">
+                    <div className="flex flex-row items-center gap-4 p-2 bg-gray-100 rounded-md">
                         <div className="flex flex-col flex-1">
-                            <div className='mb-2 flex items-center'>
+                            <div className='flex items-center mb-2'>
                                 <TextField
                                     id="order_type_code"
                                     size="small"

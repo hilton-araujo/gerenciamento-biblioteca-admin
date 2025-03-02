@@ -90,8 +90,8 @@ const EditClientForm = ({ clientNuit, client }: ClientProps) => {
 
     return (
         <div className="grid w-full lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-                <div className="rounded-md bg-white py-6">
+            <div className="grid items-start gap-4 auto-rows-max lg:col-span-2 lg:gap-8">
+                <div className="bg-white rounded-md">
                     <form>
                         <CardContent>
                             <div className="flex flex-col gap-2">
@@ -119,7 +119,7 @@ const EditClientForm = ({ clientNuit, client }: ClientProps) => {
                             </div>
                         </CardContent>
                     </form>
-                    <div className="mt-2 flex items-center justify-end gap-2">
+                    <div className="flex items-end justify-end gap-2 mt-2 mb-2 mr-2">
                         <Button variant="outline" onClick={() => navigate.back()}>
                             CANCELAR
                         </Button>

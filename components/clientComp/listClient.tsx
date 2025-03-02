@@ -1,7 +1,9 @@
 import React from 'react'
-import Header from '../header'
 import { useRouter } from 'next/navigation'
-import ClientTable from './clientTable.'
+import { PageHeader } from '../app-header'
+import { DataTable } from '../ui/data-table'
+import { IconButton } from '@mui/material'
+import { Eye, FileEdit, Users } from 'lucide-react'
 
 type Props = {
     clients: any
@@ -11,21 +13,60 @@ type Props = {
 
 const ListClient = ({ clients, isLoading }: Props) => {
     const navigate = useRouter()
-    console.log("clients", clients);
+
+    const columns = [
+        { header: "Código", accessorKey: "code" },
+        { header: "Nome", accessorKey: "name" },
+        { header: "Apelido", accessorKey: "surname" },
+        { header: "Nuit", accessorKey: "nuit" },
+        { header: "N de Documento", accessorKey: "documentNumber" },
+        { header: "Email", accessorKey: "email" },
+        { header: "Cotacto", accessorKey: "phone" },
+        { header: "Endereço", accessorKey: "address" },
+        { header: "Cidade", accessorKey: "city" },
+        { header: "Codigo Postal", accessorKey: "postalCode" },
+        {
+            header: "Estado",
+            accessorKey: "active",
+            cell: (book: any) => (
+                <span
+                    className={`px-2 py-1 rounded-full text-white text-sm ${book.active
+                        ? "bg-green-500"
+                        : "bg-red-500"
+                        }`}
+                >
+                    {book.active ? "Ativo" : "Inativo"}
+                </span>
+            ),
+        },
+    ];
 
     return (
-        <div className="flex min-h-screen w-full flex-col">
+        <div className="flex flex-col w-full min-h-screen">
             <div className="flex flex-col w-full">
-                <main className="grid grid-cols-1 flex-1 items-start gap-4 sm:px-6 sm:py-6 md:gap-4">
-                    <Header
-                        title={'Gestão de Clientes'}
-                        description={'       Encontre aqui os detalhes de todos os clientes.'}
-                        addButton={true}
-                        buttons={true}
-                        onClick={() => navigate.push("client/add")}
-                    />
+                <main className="grid items-start flex-1 grid-cols-1 gap-4">
+                    <PageHeader title="Gerenciamento de Clientes" description="Gerenciar de clientes da biblioteca" icon={Users} />
 
-                    <ClientTable clients={clients} isLoading={isLoading} />
+                    <DataTable
+                        data={clients}
+                        columns={columns}
+                        title="Clientes"
+                        addUrl="client/add"
+                        isLoading={isLoading}
+                        actions={(client) => (
+                            <div className="flex items-end justify-end gap-2">
+                                <IconButton className="text-green-500 hover:text-green-700">
+                                    <Eye size={18} />
+                                </IconButton>
+                                <IconButton
+                                    onClick={() => navigate.push(`/admin/client/${client.nuit}`)}
+                                    className="text-blue-500 hover:text-blue-700"
+                                >
+                                    <FileEdit size={18} />
+                                </IconButton>
+                            </div>
+                        )}
+                    />
                 </main>
             </div>
         </div>

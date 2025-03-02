@@ -1,9 +1,11 @@
 "use client";
 import EditClientForm from '@/components/clientComp/editClientForm';
-import Header from '@/components/header';
+import { PageHeader } from '@/components/app-header';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { API_ENDPOINTS } from '@/data/client/endpoint';
 import { useGet } from '@/data/hooks';
 import { Client } from '@/model/client';
+import { Users } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React from 'react'
 
@@ -18,20 +20,25 @@ const EditClientPage = () => {
     const client = data?.data ?? {} as Client
 
     return (
-        <div className="flex min-h-screen w-full flex-col">
-            <div className="flex flex-col w-full">
-                <main className="grid grid-cols-1 flex-1 items-start gap-4 sm:px-6 sm:py-6 md:gap-4">
-                    <Header
-                        title={'Editar Cliente'}
-                        description={'Aqui você pode editar os detalhes de um cliente.'}
-                        addButton={false}
-                        buttons={false}
-                    />
+        <>
+            <PageHeader
+                title="Editar Cliente"
+                description="Editar cliente do sistema de biblioteca"
+                icon={Users}
+                backUrl="../client"
+            />
 
-                    <EditClientForm clientNuit={nuit as string} client={client} />
-                </main>
-            </div>
-        </div>
+            <Card className="animate-fade-in">
+                <CardHeader>
+                    <CardTitle>Informações a Editar de Cliente</CardTitle>
+                    <CardDescription>
+                        Insira os detalhes a Editar no cliente.
+                    </CardDescription>
+                </CardHeader>
+
+                <EditClientForm clientNuit={nuit as string} client={client} />
+            </Card>
+        </>
     )
 }
 

@@ -4,8 +4,7 @@ import { Box, Tab, useMediaQuery, useTheme } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import Header from "@/components/header";
-import WorkflowComp from "@/components/workflowComp/workflow/workflow";
+import WorkflowComp from "@/components/workflowComp/workflow";
 
 interface Column {
     id: string;
@@ -32,15 +31,15 @@ export default function Workflow() {
     };
 
     return (
-        <div className="mx-4 flex flex-col space-y-4">
-            <Header
+        <div className="flex flex-col mx-4 space-y-4">
+            {/* <Header
                 title={"Criar Fluxo de Trabalho"}
                 description={"Aqui vocês pode criar um fluxo de trabalho."}
                 addButton={false}
                 buttons={false}
-            />
+            /> */}
 
-            <div className="bg-white p-4 rounded shadow-lg mt-2">
+            <div className="p-4 mt-2 bg-white rounded shadow-lg">
                 <TabContext value={value}>
                     <Box sx={{ borderBottom: 1, borderColor: 'divider', mb: 2 }}>
                         <TabList

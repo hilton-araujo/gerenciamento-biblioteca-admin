@@ -11,11 +11,7 @@ const CategoryPage = () => {
     })
     const categories = data?.data ?? []
 
-    return (
-        <div>
-            <ListCategories categories={categories} isLoading={isLoading} />
-        </div>
-    )
+    return <ListCategories categories={categories} isLoading={isLoading} />;
 }
 
 export default CategoryPage

@@ -11,11 +11,7 @@ const ClientPage = () => {
     })
     const clients = data?.data ?? []
 
-    return (
-        <div>
-            <ListClient clients={clients} isLoading={isLoading} />
-        </div>
-    )
+    return <ListClient clients={clients} isLoading={isLoading} />;
 }
 
 export default ClientPage

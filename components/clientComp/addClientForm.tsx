@@ -1,5 +1,5 @@
 import { CardContent, TextField } from '@mui/material';
-import { FormikProps, useFormik } from 'formik';
+import { useFormik } from 'formik';
 import React from 'react'
 import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
@@ -71,9 +71,9 @@ const AddClientForm = () => {
     });
 
     return (
-        <div className="grid w-full lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-                <div className="rounded-md bg-white py-6">
+        <div className="grid w-full">
+            <div className="grid items-start gap-4 auto-rows-max lg:col-span-2 lg:gap-8">
+                <div className="bg-white rounded-md">
                     <form onSubmit={addClientFormik.handleSubmit}>
                         <CardContent>
                             <div className="flex flex-col gap-2">
@@ -101,7 +101,7 @@ const AddClientForm = () => {
                                 </div>
                             </div>
                         </CardContent>
-                        <div className="mt-2 flex items-center justify-end gap-2">
+                        <div className="flex items-center justify-end gap-2 mt-2">
                             <Button variant="outline" onClick={() => navigate.back()}>
                                 CANCELAR
                             </Button>

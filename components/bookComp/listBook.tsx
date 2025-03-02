@@ -1,5 +1,5 @@
 import React from 'react'
-import { PageHeader } from '../src/components/page-header'
+import { PageHeader } from '../app-header'
 import { Book, Eye, FileEdit } from 'lucide-react'
 import { DataTable } from '../ui/data-table'
 import { IconButton } from '@mui/material';

@@ -15,7 +15,7 @@ import {
     Legend,
 } from "recharts";
 import { FC } from "react";
-import { PageHeader } from "@/components/src/components/page-header";
+import { PageHeader } from "@/components/app-header";
 import { StatsCard } from "@/components/ui/stats-card";
 
 const BOOK_CATEGORIES = [
