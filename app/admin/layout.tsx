@@ -1,6 +1,7 @@
 "use client";
-import { LibrarySidebar } from "@/components/library-sidebar";
-import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
+
+import { LibrarySidebar } from "@/components/layouts/library-sidebar";
+import { SidebarProvider, SidebarTrigger } from "@/components/shared/ui/sidebar";
 
 interface DashboardLayoutProps {
     children: React.ReactNode;

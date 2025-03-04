@@ -1,6 +1,6 @@
 "use client";
-import EditBookForm from '@/components/bookComp/editBook'
 import { PageHeader } from '@/components/app-header';
+import EditBookForm from '@/components/features/book/editBook';
 import { Book } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React from 'react'

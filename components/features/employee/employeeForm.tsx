@@ -1,8 +1,5 @@
 import { MenuItem, TextField } from '@mui/material'
 import React from 'react'
-import { generateFieldProps } from '../generateFieldProps'
-import { CardContent } from '../ui/card'
-import { Button } from '../ui/button'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { useRouter } from 'next/navigation'
 import { useGet } from '@/data/hooks'
@@ -11,6 +8,9 @@ import { useFormik } from 'formik'
 import { usePost } from '@/data/hooks'
 import { toast } from '@/hooks/use-toast'
 import * as Yup from 'yup'
+import { CardContent } from '@/components/shared/ui/card'
+import { generateFieldProps } from '@/components/shared/generateFieldProps'
+import { Button } from '@/components/shared/ui/button'
 
 const EmployeeForm = () => {
     const navigate = useRouter()
@@ -19,6 +19,7 @@ const EmployeeForm = () => {
         toast({
             title: "Sucesso",
             description: data.message,
+            variant: "default"
         });
         addEmployeeFormik?.setSubmitting(false);
         addEmployeeFormik?.resetForm();
@@ -77,6 +78,8 @@ const EmployeeForm = () => {
     const { data } = useGet({
         endpoint: API_ENDPOINTS.DOCUMENTS_TYPES
     })
+    console.log("addEmployeeFormik", addEmployeeFormik?.values);
+    console.log("errors", addEmployeeFormik?.errors);
 
     return (
         <div className="grid w-full lg:gap-8">
@@ -127,7 +130,7 @@ const EmployeeForm = () => {
                         <Button variant="outline" onClick={() => navigate.back()}>
                             CANCELAR
                         </Button>
-                        <Button type="submit" disabled={!addEmployeeFormik.isValid || isPending}>
+                        <Button onClick={() => { addEmployeeFormik.handleSubmit() }} type="submit" disabled={!addEmployeeFormik.isValid || isPending}>
                             {isPending && <ReloadIcon className="mr-2 animate-spin" />}
                             ADICIONAR
                         </Button>

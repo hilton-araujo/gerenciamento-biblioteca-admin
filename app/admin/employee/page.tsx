@@ -1,5 +1,5 @@
 "use client";
-import ListEmployee from '@/components/employeeComp/listEmployee'
+import ListEmployee from '@/components/features/employee/listEmployee'
 import { API_ENDPOINTS } from '@/data/client/endpoint'
 import { useGet } from '@/data/hooks'
 import React from 'react'

@@ -1,7 +1,5 @@
 import React from 'react'
-import { CardContent } from '../ui/card'
 import { MenuItem, TextField } from '@mui/material'
-import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { useGet, usePut } from '@/data/hooks'
 import { API_ENDPOINTS } from '@/data/client/endpoint'
@@ -10,6 +8,9 @@ import { toast } from '@/hooks/use-toast'
 import { ReloadIcon } from "@radix-ui/react-icons";
 import * as Yup from 'yup'
 import { Category } from '@/model/category'
+import { CardContent } from '@/components/shared/ui/card'
+import { generateFieldProps } from '@/components/shared/generateFieldProps'
+import { Button } from '@/components/shared/ui/button'
 
 interface Props {
     bookId: string
@@ -96,9 +97,9 @@ const EditBookForm = ({ bookId }: Props) => {
     });
 
     return (
-        <div className="grid  w-full lg:gap-8">
-            <div className="grid auto-rows-max items-start gap-4 lg:col-span-2 lg:gap-8">
-                <div className=" rounded-md bg-white py-6">
+        <div className="grid w-full lg:gap-8">
+            <div className="grid items-start gap-4 auto-rows-max lg:col-span-2 lg:gap-8">
+                <div className="py-6 bg-white rounded-md ">
                     <form>
                         <CardContent>
                             <div className="flex flex-col gap-2">
@@ -138,7 +139,7 @@ const EditBookForm = ({ bookId }: Props) => {
                                 </div>
 
                                 <textarea
-                                    className="w-full h-24 rounded-md border border-gray-300 p-2"
+                                    className="w-full h-24 p-2 border border-gray-300 rounded-md"
                                     placeholder="Digite a descrição do livro"
                                     name="description"
                                     value={editBookFormik.values.description}
@@ -149,7 +150,7 @@ const EditBookForm = ({ bookId }: Props) => {
                         </CardContent>
                     </form>
 
-                    <div className="mt-2 flex items-center justify-end gap-2">
+                    <div className="flex items-center justify-end gap-2 mt-2">
                         <Button
                             variant="outline"
                             onClick={() => navigate.back()}
@@ -169,32 +170,6 @@ const EditBookForm = ({ bookId }: Props) => {
             </div>
         </div>
     )
-}
-
-function generateFieldProps(
-    formik: FormikProps<any>,
-    name: string,
-    label: string,
-    placeholder: string,
-    type: 'text' | 'number' | 'password' | 'email' = 'text'
-) {
-    return {
-        id: name,
-        name,
-        label,
-        placeholder,
-        type,
-        size: 'small' as const,
-        fullWidth: true,
-        variant: 'outlined' as const,
-        value: formik.values[name],
-        onChange: formik.handleChange,
-        onBlur: formik.handleBlur,
-        error: formik.touched[name] && Boolean(formik.errors[name]),
-        helperText: formik.touched[name] && typeof formik.errors[name] === 'string'
-            ? formik.errors[name]
-            : undefined,
-    };
 }
 
 export default EditBookForm

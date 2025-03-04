@@ -1,7 +1,5 @@
 import React from 'react'
-import { CardContent } from '../ui/card'
 import { MenuItem, TextField } from '@mui/material'
-import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { useGet, usePost } from '@/data/hooks'
 import { API_ENDPOINTS } from '@/data/client/endpoint'
@@ -10,7 +8,9 @@ import { toast } from '@/hooks/use-toast'
 import { ReloadIcon } from "@radix-ui/react-icons";
 import * as Yup from 'yup';
 import { Category } from '@/model/category'
-import { generateFieldProps } from '../generateFieldProps'
+import { CardContent } from '@/components/shared/ui/card'
+import { generateFieldProps } from '@/components/shared/generateFieldProps'
+import { Button } from '@/components/shared/ui/button'
 
 const AddBookForm = () => {
     const navigate = useRouter();

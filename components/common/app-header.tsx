@@ -1,7 +1,7 @@
+import { Button } from "@/components/shared/ui/button";
 import { cn } from "@/lib/utils";
 import { ChevronLeft, LucideIcon, PlusCircle } from "lucide-react";
 import Link from "next/link";
-import { Button } from "./shared/ui/button";
 
 interface PageHeaderProps {
     title: string;

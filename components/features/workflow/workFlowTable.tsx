@@ -1,10 +1,10 @@
 import React, { useState } from 'react'
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { IconButton, Paper, TableContainer } from "@mui/material";
 import { AlertCircle, FileEdit, PowerCircle } from 'lucide-react';
 import { useRouter } from 'next/navigation';
-import FiltesPag from '@/components/filters/filter';
 import { Workflow } from '@/model/workflow';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/shared/ui/table';
+import FiltesPag from '@/components/shared/filters/filter';
 
 type Props = {
     workflows: any
@@ -74,7 +74,7 @@ const WorkFlowTable = ({ workflows, isLoading }: Props) => {
                             <TableRow className="hover:bg-gray-50">
                                 <TableCell colSpan={columns.length}>
                                     <div className="flex items-center justify-center h-64">
-                                        <div className="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"></div>
+                                        <div className="w-16 h-16 border-t-2 border-b-2 border-blue-500 rounded-full animate-spin"></div>
                                     </div>
                                 </TableCell>
                             </TableRow>
@@ -108,8 +108,8 @@ const WorkFlowTable = ({ workflows, isLoading }: Props) => {
                                 <TableRow className="hover:bg-gray-50">
                                     <TableCell colSpan={columns.length}>
                                         <div className="flex flex-col items-center justify-center h-full">
-                                            <AlertCircle className="h-8 w-8 text-red-400" />
-                                            <span className="ml-2 mt-2">NENHUM WORKFLOW ENCONTRADO</span>
+                                            <AlertCircle className="w-8 h-8 text-red-400" />
+                                            <span className="mt-2 ml-2">NENHUM WORKFLOW ENCONTRADO</span>
                                         </div>
                                     </TableCell>
                                 </TableRow>

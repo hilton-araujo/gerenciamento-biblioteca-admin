@@ -1,16 +1,9 @@
 import React, { useState } from "react";
-import {
-    Table,
-    TableBody,
-    TableCell,
-    TableHead,
-    TableHeader,
-    TableRow,
-} from "@/components/ui/table";
-import { Button } from "@/components/ui/button";
 import { PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Pagination } from "@mui/material"; // Importando a paginação do MUI
+import { Button } from "./button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
 
 interface Column<T> {
     header: string;

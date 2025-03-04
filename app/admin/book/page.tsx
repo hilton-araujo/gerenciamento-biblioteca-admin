@@ -2,7 +2,7 @@
 import React from 'react'
 import { useGet } from '@/data/hooks';
 import { API_ENDPOINTS } from '@/data/client/endpoint';
-import ListBook from '@/components/bookComp/listBook';
+import ListBook from '@/components/features/book/listBook';
 
 const BookPage = () => {
 

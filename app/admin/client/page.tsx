@@ -1,5 +1,5 @@
 "use client";
-import ListClient from '@/components/clientComp/listClient'
+import ListClient from '@/components/features/client/listClient'
 import { API_ENDPOINTS } from '@/data/client/endpoint'
 import { useGet } from '@/data/hooks'
 import React from 'react'

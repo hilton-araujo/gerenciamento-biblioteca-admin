@@ -1,12 +1,12 @@
 "use client";
-import EditCategoryForm from '@/components/categoryComp/editCategoryForm';
 import { PageHeader } from '@/components/app-header';
 import { API_ENDPOINTS } from '@/data/client/endpoint';
 import { useGet } from '@/data/hooks';
 import { FolderOpen } from 'lucide-react';
 import { useParams } from 'next/navigation';
 import React from 'react'
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/shared/ui/card';
+import EditCategoryForm from '@/components/features/category/editCategoryForm';
 
 const EditCategoryPage = () => {
     const { id } = useParams();

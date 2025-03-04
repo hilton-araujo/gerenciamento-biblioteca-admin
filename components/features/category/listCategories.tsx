@@ -1,25 +1,21 @@
 import React from 'react'
-import { PageHeader } from '../app-header'
-import { Book, Eye, FileEdit } from 'lucide-react'
-import { DataTable } from '../ui/data-table'
-import { IconButton } from '@mui/material';
-import { useRouter } from 'next/navigation';
+import { useRouter } from 'next/navigation'
+import { Eye, FileEdit, FolderOpen } from 'lucide-react'
+import { IconButton } from '@mui/material'
+import { PageHeader } from '@/components/app-header';
+import { DataTable } from '@/components/shared/ui/data-table';
 
 type Props = {
-    props: any
+    categories: any
     isLoading: boolean
 }
 
-const ListBook = ({ props, isLoading }: Props) => {
-    const navigate = useRouter();
+const ListCategories = ({ categories, isLoading }: Props) => {
+    const navigate = useRouter()
 
     const columns = [
         { header: "Código", accessorKey: "code" },
-        { header: "Isbn", accessorKey: "isbn" },
-        { header: "Título", accessorKey: "title" },
-        { header: "Autor", accessorKey: "author" },
         { header: "Categoria", accessorKey: "category" },
-        { header: "Ano de Publicação", accessorKey: "publishYear" },
         {
             header: "Estado",
             accessorKey: "active",
@@ -40,21 +36,21 @@ const ListBook = ({ props, isLoading }: Props) => {
         <div className="flex flex-col w-full min-h-screen">
             <div className="flex flex-col w-full">
                 <main className="grid items-start flex-1 grid-cols-1 gap-4">
-                    <PageHeader title="Gerenciamento de Livros" description="Gerenciar a coleção de livros da biblioteca" icon={Book} />
+                    <PageHeader title="Gerenciamento de Categorias" description="Gerenciar a coleção de categorias da biblioteca" icon={FolderOpen} />
 
                     <DataTable
-                        data={props}
+                        data={categories}
                         columns={columns}
-                        title="Livros"
-                        addUrl="book/add"
+                        title="Categorias"
+                        addUrl="category/add"
                         isLoading={isLoading}
-                        actions={(book) => (
+                        actions={(category) => (
                             <div className="flex items-end justify-end gap-2">
                                 <IconButton className="text-green-500 hover:text-green-700">
                                     <Eye size={18} />
                                 </IconButton>
                                 <IconButton
-                                    onClick={() => navigate.push(`/admin/book/${book.code}`)}
+                                    onClick={() => navigate.push(`/admin/category/${category.code}`)}
                                     className="text-blue-500 hover:text-blue-700"
                                 >
                                     <FileEdit size={18} />
@@ -65,7 +61,7 @@ const ListBook = ({ props, isLoading }: Props) => {
                 </main>
             </div>
         </div>
-    );
-};
+    )
+}
 
-export default ListBook
+export default ListCategories

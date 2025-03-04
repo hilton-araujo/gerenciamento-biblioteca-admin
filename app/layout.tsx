@@ -2,13 +2,11 @@
 import './globals.css'
 import * as React from "react"
 import {
-  TooltipProvider,
-} from "@/components/ui/tooltip"
-import {
   QueryClient,
   QueryClientProvider,
 } from '@tanstack/react-query'
-import { Toaster } from "@/components/ui/toaster"
+import { TooltipProvider } from '@/components/shared/ui/tooltip';
+import { Toaster } from '@/components/shared/ui/toaster';
 
 export default function Layout({
   children

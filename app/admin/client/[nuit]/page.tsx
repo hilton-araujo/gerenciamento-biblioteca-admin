@@ -1,7 +1,7 @@
 "use client";
-import EditClientForm from '@/components/clientComp/editClientForm';
 import { PageHeader } from '@/components/app-header';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import EditClientForm from '@/components/features/client/editClientForm';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/shared/ui/card';
 import { API_ENDPOINTS } from '@/data/client/endpoint';
 import { useGet } from '@/data/hooks';
 import { Client } from '@/model/client';

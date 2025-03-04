@@ -1,14 +1,14 @@
 import { CardContent, TextField } from '@mui/material';
 import { useFormik } from 'formik';
 import React from 'react'
-import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
 import { usePost } from '@/data/hooks'
 import { API_ENDPOINTS } from '@/data/client/endpoint'
 import { toast } from '@/hooks/use-toast'
 import { ReloadIcon } from "@radix-ui/react-icons";
 import * as Yup from 'yup';
-import { generateFieldProps } from '../generateFieldProps';
+import { generateFieldProps } from '@/components/shared/generateFieldProps';
+import { Button } from '@/components/shared/ui/button';
 
 const AddClientForm = () => {
     const navigate = useRouter();

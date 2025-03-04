@@ -1,30 +1,28 @@
 import React from 'react'
-import { useRouter } from 'next/navigation'
-import { PageHeader } from '../app-header'
-import { DataTable } from '../ui/data-table'
-import { IconButton } from '@mui/material'
-import { Eye, FileEdit, Users } from 'lucide-react'
+import { useRouter } from 'next/navigation';
+import { Eye, FileEdit, Users } from 'lucide-react';
+import { IconButton } from '@mui/material';
+import { PageHeader } from '@/components/common/app-header';
+import { DataTable } from '@/components/shared/ui/data-table';
 
-type Props = {
-    clients: any
-    isLoading: boolean
+interface Props {
+    employees: any;
+    isLoading: boolean;
 }
 
-
-const ListClient = ({ clients, isLoading }: Props) => {
+const ListEmployee = ({ employees, isLoading }: Props) => {
     const navigate = useRouter()
 
     const columns = [
         { header: "Código", accessorKey: "code" },
         { header: "Nome", accessorKey: "name" },
         { header: "Apelido", accessorKey: "surname" },
+        { header: "Genero", accessorKey: "genre" },
         { header: "Nuit", accessorKey: "nuit" },
-        { header: "N de Documento", accessorKey: "documentNumber" },
+        { header: "Tipo de documento", accessorKey: "documentType" },
+        { header: "N de documento", accessorKey: "documentNumber" },
         { header: "Email", accessorKey: "email" },
-        { header: "Cotacto", accessorKey: "phone" },
-        { header: "Endereço", accessorKey: "address" },
-        { header: "Cidade", accessorKey: "city" },
-        { header: "Codigo Postal", accessorKey: "postalCode" },
+        { header: "Cotacto", accessorKey: "msidn" },
         {
             header: "Estado",
             accessorKey: "active",
@@ -45,21 +43,21 @@ const ListClient = ({ clients, isLoading }: Props) => {
         <div className="flex flex-col w-full min-h-screen">
             <div className="flex flex-col w-full">
                 <main className="grid items-start flex-1 grid-cols-1 gap-4">
-                    <PageHeader title="Gerenciamento de Clientes" description="Gerenciar de clientes da biblioteca" icon={Users} />
+                    <PageHeader title="Gerenciamento de Funcionários" description="Gerenciar de funcionários da biblioteca" icon={Users} />
 
                     <DataTable
-                        data={clients}
+                        data={employees}
                         columns={columns}
-                        title="Clientes"
-                        addUrl="client/add"
+                        title="Funcionários"
+                        addUrl="employee/add"
                         isLoading={isLoading}
-                        actions={(client) => (
+                        actions={(employee) => (
                             <div className="flex items-end justify-end gap-2">
                                 <IconButton className="text-green-500 hover:text-green-700">
                                     <Eye size={18} />
                                 </IconButton>
                                 <IconButton
-                                    onClick={() => navigate.push(`/admin/client/${client.nuit}`)}
+                                    onClick={() => navigate.push(`/admin/employee/${employee.nuit}`)}
                                     className="text-blue-500 hover:text-blue-700"
                                 >
                                     <FileEdit size={18} />
@@ -73,4 +71,4 @@ const ListClient = ({ clients, isLoading }: Props) => {
     )
 }
 
-export default ListClient
+export default ListEmployee

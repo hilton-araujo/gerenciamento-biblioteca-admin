@@ -1,7 +1,7 @@
 "use client";
-import EmployeeForm from '@/components/employeeComp/employeeForm';
 import { PageHeader } from '@/components/app-header';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import EmployeeForm from '@/components/features/employee/employeeForm';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/shared/ui/card';
 import { Users } from 'lucide-react';
 import React from 'react'
 

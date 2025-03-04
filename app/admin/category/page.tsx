@@ -1,5 +1,5 @@
 "use client";
-import ListCategories from '@/components/categoryComp/listCategories'
+import ListCategories from '@/components/features/category/listCategories';
 import { API_ENDPOINTS } from '@/data/client/endpoint'
 import { useGet } from '@/data/hooks'
 import React from 'react'

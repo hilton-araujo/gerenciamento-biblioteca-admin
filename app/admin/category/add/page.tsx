@@ -1,7 +1,7 @@
 "use client";
-import AddCategorieForm from '@/components/categoryComp/addCategorieForm';
 import { PageHeader } from '@/components/app-header';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import AddCategorieForm from '@/components/features/category/addCategorieForm';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/shared/ui/card';
 import { FolderOpen } from 'lucide-react';
 import React from 'react'
 

@@ -4,7 +4,7 @@ import { Box, Tab, useMediaQuery, useTheme } from "@mui/material";
 import TabContext from "@mui/lab/TabContext";
 import TabList from "@mui/lab/TabList";
 import TabPanel from "@mui/lab/TabPanel";
-import WorkflowComp from "@/components/workflowComp/workflow";
+import WorkflowComp from "@/components/features/workflow/workflow";
 
 interface Column {
     id: string;

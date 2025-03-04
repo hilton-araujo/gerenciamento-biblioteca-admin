@@ -1,22 +1,16 @@
-import React, { useEffect } from 'react'
-import { CardContent } from '../ui/card'
+import React from 'react'
 import { TextField } from '@mui/material'
-import { Button } from '../ui/button'
 import { useRouter } from 'next/navigation'
-import { usePut } from '@/data/hooks'
+import { useGet, usePost } from '@/data/hooks'
 import { API_ENDPOINTS } from '@/data/client/endpoint'
 import { useFormik } from 'formik'
 import { toast } from '@/hooks/use-toast'
 import { ReloadIcon } from "@radix-ui/react-icons";
 import * as Yup from 'yup';
-import { Category } from '@/model/category'
+import { CardContent } from '@/components/shared/ui/card'
+import { Button } from '@/components/shared/ui/button'
 
-type Props = {
-    category: Category
-    categoryId: string
-}
-
-const EditCategoryForm = ({ category, categoryId }: Props) => {
+const AddCategorieForm = () => {
     const navigate = useRouter();
 
     const handleSuccess = (data: any) => {
@@ -24,8 +18,8 @@ const EditCategoryForm = ({ category, categoryId }: Props) => {
             title: "Sucesso",
             description: data.message,
         });
-        EditCategorieFormik?.setSubmitting(false);
-        EditCategorieFormik?.resetForm()
+        AddCategorieFormik?.setSubmitting(false);
+        AddCategorieFormik?.resetForm()
         navigate.push("/admin/category");
     };
 
@@ -35,10 +29,10 @@ const EditCategoryForm = ({ category, categoryId }: Props) => {
             description: error.response.data.message,
             variant: "destructive"
         });
-        EditCategorieFormik?.setSubmitting(false);
+        AddCategorieFormik?.setSubmitting(false);
     };
 
-    const { put, isPending } = usePut({
+    const { post, isPending } = usePost({
         endpoint: API_ENDPOINTS.ADD_CATEGORIES,
         successAction: (data) => {
             handleSuccess(data)
@@ -48,25 +42,25 @@ const EditCategoryForm = ({ category, categoryId }: Props) => {
         }
     })
 
-    const editBookSchema = Yup.object().shape({
-        category: Yup.string().required('A designação da categoria e obrigátoria'),
+    const addBookSchema = Yup.object().shape({
+        category: Yup.string().required('A designação do category e obrigátoria'),
     });
 
 
-    const EditCategorieFormik = useFormik({
+    const AddCategorieFormik = useFormik({
         initialValues: {
-            code: categoryId || "",
-            category: category?.category || "",
+            category: "",
         },
-        validationSchema: editBookSchema,
+        validationSchema: addBookSchema,
         onSubmit: (values) => {
-            put(values)
+            post(values)
         },
     })
 
-    useEffect(() => {
-        EditCategorieFormik.setFieldValue("category", category?.category || "");
-    }, [category])
+    const { data } = useGet({
+        endpoint: API_ENDPOINTS.GET_CATEGORIES
+    })
+    const categories = data?.data ?? []
 
     return (
         <div className="grid w-full lg:gap-8">
@@ -84,17 +78,17 @@ const EditCategoryForm = ({ category, categoryId }: Props) => {
                                         placeholder='Categoria'
                                         variant="outlined"
                                         name='category'
-                                        value={EditCategorieFormik.values.category}
-                                        onChange={EditCategorieFormik.handleChange}
-                                        onBlur={EditCategorieFormik.handleBlur}
-                                        error={EditCategorieFormik.touched.category && Boolean(EditCategorieFormik.errors.category)}
-                                        helperText={EditCategorieFormik.touched.category && EditCategorieFormik.errors.category}
+                                        value={AddCategorieFormik.values.category}
+                                        onChange={AddCategorieFormik.handleChange}
+                                        onBlur={AddCategorieFormik.handleBlur}
+                                        error={AddCategorieFormik.touched.category && Boolean(AddCategorieFormik.errors.category)}
+                                        helperText={AddCategorieFormik.touched.category && AddCategorieFormik.errors.category}
                                     />
                                 </div>
                             </div>
                         </CardContent>
                     </form>
-                    <div className="flex items-center justify-end gap-2 mt-2 mr-2">
+                    <div className="flex items-center justify-end gap-2 mt-2">
                         <Button
                             variant="outline"
                             onClick={() => navigate.back()}
@@ -104,11 +98,11 @@ const EditCategoryForm = ({ category, categoryId }: Props) => {
 
                         <Button
                             type='submit'
-                            onClick={() => EditCategorieFormik.submitForm()}
-                            disabled={!EditCategorieFormik.isValid || isPending}
+                            onClick={() => AddCategorieFormik.submitForm()}
+                            disabled={!AddCategorieFormik.isValid || isPending}
                         >
                             {isPending && <ReloadIcon className="mr-2 animate-spin" />}
-                            EDITAR
+                            ADICIONAR
                         </Button>
                     </div>
                 </div>
@@ -117,4 +111,4 @@ const EditCategoryForm = ({ category, categoryId }: Props) => {
     )
 }
 
-export default EditCategoryForm
+export default AddCategorieForm

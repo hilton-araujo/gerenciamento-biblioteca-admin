@@ -1,9 +1,10 @@
-import { generateFieldProps } from '@/components/generateFieldProps'
-import { Button } from '@/components/ui/button'
-import { CardContent, TextField } from '@mui/material'
+import { TextField } from '@mui/material'
 import { ReloadIcon } from '@radix-ui/react-icons'
 import { FormikProps } from 'formik'
 import React from 'react'
+import { CardContent } from '@/components/shared/ui/card'
+import { generateFieldProps } from '@/components/shared/generateFieldProps'
+import { Button } from '@/components/shared/ui/button'
 
 interface Props {
     formik: FormikProps<any>
@@ -21,7 +22,7 @@ const AddWorkFlow = ({ formik, isPending }: Props) => {
                     </div>
                 </CardContent>
             </form>
-            <div className="mt-2 flex items-center justify-end gap-2">
+            <div className="flex items-center justify-end gap-2 mt-2">
                 <Button type="submit" onClick={formik.submitForm} disabled={!formik.isValid || isPending}>
                     {isPending && <ReloadIcon className="mr-2 animate-spin" />}
                     ADICIONAR

@@ -1,5 +1,5 @@
 import { cn } from "@/lib/utils";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/shared/ui/card";
 import { LucideIcon } from "lucide-react";
 
 interface StatsCardProps {

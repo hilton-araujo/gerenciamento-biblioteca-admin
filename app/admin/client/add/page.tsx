@@ -1,7 +1,7 @@
 "use client";
-import AddClientForm from '@/components/clientComp/addClientForm';
 import { PageHeader } from '@/components/app-header';
-import { Card, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import AddClientForm from '@/components/features/client/addClientForm';
+import { Card, CardDescription, CardHeader, CardTitle } from '@/components/shared/ui/card';
 import { Users } from 'lucide-react';
 import React from 'react'
 
