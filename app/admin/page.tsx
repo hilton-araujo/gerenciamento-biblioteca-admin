@@ -1,6 +1,6 @@
 "use client"
 import { Book, BookOpen, Home, Library, Users } from "lucide-react";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/shared/ui/card";
 import {
     BarChart,
     Bar,
@@ -16,7 +16,7 @@ import {
 } from "recharts";
 import { FC } from "react";
 import { PageHeader } from "@/components/app-header";
-import { StatsCard } from "@/components/ui/stats-card";
+import { StatsCard } from "@/components/shared/ui/stats-card";
 
 const BOOK_CATEGORIES = [
     { name: "Fiction", value: 400, color: "#8884d8" },
