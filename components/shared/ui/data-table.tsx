@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { PlusCircle } from "lucide-react";
 import { useRouter } from "next/navigation";
 import { Pagination } from "@mui/material"; // Importando a paginação do MUI
-import { Button } from "./button";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "./table";
+import { Button } from "@/components/shared/ui/button";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/shared/ui/table";
 
 interface Column<T> {
     header: string;
@@ -49,7 +49,7 @@ export function DataTable<T>({
                     </Button>
                 )}
             </div>
-            <div className="border rounded-md bg-card">
+            <div className="border rounded-md">
                 {isLoading ? (
                     <div className="flex justify-center p-8">
                         <div className="animate-pulse-soft">Loading...</div>
