@@ -2,6 +2,7 @@ import {
     Book,
     FolderOpen,
     Home,
+    Plus,
     Users,
 } from "lucide-react";
 
@@ -31,9 +32,9 @@ export const navbarConfig = [
         href: "/admin/book",
         icon: <Book className="w-5 h-5" />,
     },
-    // {
-    //     title: "Workflow",
-    //     href: "/admin/workflow",
-    //     icon: <Plus className="w-5 h-5" />,
-    // },
+    {
+        title: "Workflow",
+        href: "/admin/workflow",
+        icon: <Plus className="w-5 h-5" />,
+    },
 ];
