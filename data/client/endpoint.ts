@@ -26,6 +26,7 @@ export const API_ENDPOINTS = {
     //PUT
     EDI_CATEGORY: `/category`,
     EDIT_CLIENT: `/client`,
-    EDIT_BOOK: `/book`
+    EDIT_BOOK: `/book`,
+    UPDATE_WORKFLOW: `/workflow`,
 
 }
