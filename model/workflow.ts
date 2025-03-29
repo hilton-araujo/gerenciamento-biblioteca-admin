@@ -4,4 +4,5 @@ export interface Workflow {
     designation: string
     description: string
     order_type: string
+    orderTypeCode: string
 }
