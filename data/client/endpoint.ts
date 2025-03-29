@@ -6,6 +6,7 @@ export const API_ENDPOINTS = {
     GET_CLIENTS: "/client",
     GET_WORKFLOW: "/workflow",
     GET_EMPLOYEES: "/employee",
+    GET_STAGE: "/stage",
 
     //Enums
     GET_ORDER_TYPE: "/order-type",
@@ -22,11 +23,13 @@ export const API_ENDPOINTS = {
     ADD_CATEGORIES: `/category`,
     ADD_CLIENT: `/client`,
     ADD_WORKFLOW: `/workflow`,
+    ADD_STAGE: `/stage`,
 
     //PUT
     EDI_CATEGORY: `/category`,
     EDIT_CLIENT: `/client`,
     EDIT_BOOK: `/book`,
     UPDATE_WORKFLOW: `/workflow`,
+    UPDATE_STAGE: `/stage`,
 
 }
