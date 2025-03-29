@@ -60,9 +60,9 @@ export function DataTable<T extends Record<string, any>>({
         })
     })
 
-    const paginatedData = filteredData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+    const paginatedData = filteredData?.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
 
-    const columnsToRender = actions ? [...columns, { name: "Actions", uid: "actions" }] : columns
+    const columnsToRender = actions ? [...columns, { name: "Ações", uid: "actions" }] : columns
 
     return (
         <div className="flex flex-col w-full">
@@ -81,7 +81,7 @@ export function DataTable<T extends Record<string, any>>({
                     <TableHeader className="bg-gray-100">
                         <TableRow>
                             {columnsToRender.map((column) => (
-                                <TableHead className={`${column.uid === "actions" ? "text-right" : ""}`} key={column.uid}>
+                                <TableHead className={`${column.uid === "actions" ? "text-right justify-end" : ""}`} key={column.uid}>
                                     {column.name}
                                 </TableHead>
                             ))}
