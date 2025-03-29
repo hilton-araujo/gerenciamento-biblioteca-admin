@@ -1,155 +1,145 @@
 import { API_ENDPOINTS } from '@/data/client/endpoint'
-import { useGet, usePost } from '@/data/hooks'
-import React, { useEffect } from 'react'
+import { useGet, usePost, usePut } from '@/data/hooks'
+import React, { useEffect, useState } from 'react'
 import WorkFlowTable from './workFlowTable'
-import { MenuItem, TextField } from '@mui/material'
-import { Button } from '@/components/shared/ui/button'
-import { PlusIcon } from 'lucide-react'
+import { List, Plus } from 'lucide-react'
 import AddWorkFlow from './addWorkFlow'
 import { toast } from '@/hooks/use-toast'
 import { useFormik } from 'formik'
 import * as Yup from 'yup'
 import { useQueryClient } from '@tanstack/react-query'
+import { Workflow } from '@/model/workflow'
+import { View } from '@/utils/enums'
+import { MuiAutocompleteSelect } from '@/components/shared/ui/autocomplete-select'
 
 const WorkflowComp = () => {
     const queryClient = useQueryClient();
-    const [view, setView] = React.useState("list")
-    const [orderType, setOrderType] = React.useState("")
+    const [view, setView] = useState<View>(View?.LIST);
+    const [orderType, setOrderType] = useState('');
+    const [selectedWorkflowRow, setSelectedWorkflowRow] = useState<Workflow | null>(null);
 
     const handleSuccess = (data: any) => {
         toast({
-            title: "Sucesso",
+            title: 'Sucesso',
             description: data.message,
         });
-        queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.GET_WORKFLOW] })
-        addWorkflowFormik?.setSubmitting(false);
-        addWorkflowFormik?.resetForm();
-        setView("list")
+        queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.GET_WORKFLOW] });
+        formik.resetForm();
+        setView(View?.LIST);
     };
 
     const handleError = (error: any) => {
         toast({
-            title: "Erro",
-            description: error.response.data.message,
-            variant: "destructive"
+            title: 'Erro',
+            description: error.response?.data?.message || 'Ocorreu um erro',
+            variant: 'destructive',
         });
-        addWorkflowFormik?.setSubmitting(false);
     };
 
     const { post, isPending } = usePost({
         endpoint: API_ENDPOINTS.ADD_WORKFLOW,
         successAction: handleSuccess,
-        errorAction: handleError
+        errorAction: handleError,
+    });
+
+    const { put, isPending: isUpdating } = usePut({
+        endpoint: API_ENDPOINTS.UPDATE_WORKFLOW,
+        successAction: handleSuccess,
+        errorAction: handleError,
     });
 
     const workflowSchema = Yup.object().shape({
-        designation: Yup.string().required("A designação é obrigatório"),
-        order_type_code: Yup.string().required("O tipo de pedido é obrigatório"),
-    })
+        designation: Yup.string().required('A designação é obrigatória'),
+        order_type_code: Yup.string().required('O tipo de pedido é obrigatório'),
+        description: Yup.string().notRequired(),
+    });
 
-    const addWorkflowFormik = useFormik({
+    const workflowEditSchema = workflowSchema.shape({
+        code: Yup.string().required('O código é obrigatório'),
+        designation: Yup.string().required('A designação é obrigatória'),
+        order_type_code: Yup.string().required('O tipo de pedido é obrigatório'),
+        description: Yup.string().notRequired(),
+    });
+
+    const formik = useFormik({
         initialValues: {
-            designation: "",
-            order_type_code: "",
+            designation: '',
+            order_type_code: '',
+            description: '',
+            code: '',
         },
+        validationSchema: view === 'edit' ? workflowEditSchema : workflowSchema,
         onSubmit: (values) => {
-            post(values)
+            const { code, ...data } = values;
+
+            if (view === 'edit' && selectedWorkflowRow) {
+                put({ values });
+            } else {
+                post(view === "edit" ? values : data);
+            }
         },
-    })
-
-    const { data, isLoading } = useGet({
-        endpoint: API_ENDPOINTS.GET_WORKFLOW
-    })
-
-    const workflow = data?.data ?? []
-
-    const { data: ortferTypes } = useGet({
-        endpoint: API_ENDPOINTS.GET_ORDER_TYPE
-    })
+    });
 
     useEffect(() => {
-        queryClient.invalidateQueries({ queryKey: [API_ENDPOINTS.GET_WORKFLOW] })
-    }, [post])
+        if (view === 'edit' && selectedWorkflowRow) {
+            formik.setValues({
+                code: selectedWorkflowRow.code || '',
+                designation: selectedWorkflowRow.designation || '',
+                description: selectedWorkflowRow.description || '',
+                order_type_code: selectedWorkflowRow.orderTypeCode || '',
+            });
+        } else {
+            formik.resetForm();
+        }
+    }, [selectedWorkflowRow, view]);
+
+    const { data: orderTypes } = useGet({
+        endpoint: API_ENDPOINTS.GET_ORDER_TYPE,
+    });
+
+    const handleOrderTypeChange = (value: string) => {
+        setOrderType(value)
+        formik.setFieldValue('order_type_code', value)
+    }
 
     return (
         <>
-            {view === "list" && (
+            {view === 'list' && (
                 <>
-                    <div className="flex flex-row items-center gap-4 p-2 bg-gray-100 rounded-md">
-                        <div className="flex flex-col flex-1">
-                            <div className='flex items-center mb-2'>
-                                <TextField
-                                    id="order_type_code"
-                                    size="small"
-                                    select
-                                    fullWidth
-                                    variant="standard"
-                                    onChange={(event) => {
-                                        setOrderType(event.target.value)
-                                        addWorkflowFormik?.setFieldValue("order_type_code", event.target.value)
-                                    }}
-                                    value={orderType}
-                                    name="order_type_code"
-                                    label="Tipo de Pedido"
-                                >
-                                    {ortferTypes?.data?.map((option: any) => (
-                                        <MenuItem key={option.id} value={option.code}>
-                                            {option.designation}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </div>
-                        </div>
-                        <div className="flex items-center">
-                            <Button className="text-white bg-blue-500" onClick={() => { setView("add") }}>
-                                <PlusIcon />
-                                Criar Novo
-                            </Button>
-                        </div>
-                    </div>
+                    <MuiAutocompleteSelect
+                        Icon={<Plus />}
+                        options={orderTypes?.data || []}
+                        value={orderType}
+                        onChange={handleOrderTypeChange}
+                        onChangeFormik={formik.setFieldValue}
+                        fieldName="order_type_code"
+                        label="Tipo de Pedido"
+                        onButtonClick={() => setView(View.ADD)}
+                    />
 
-                    <WorkFlowTable workflows={workflow} isLoading={isLoading} />
+                    <WorkFlowTable setView={setView} setSelectedWorkflowRow={setSelectedWorkflowRow} />
                 </>
             )}
 
-            {view === "add" && (
+            {(view === View?.ADD || view === View?.EDIT) && (
                 <>
-                    <div className="flex flex-row items-center gap-4 p-2 bg-gray-100 rounded-md">
-                        <div className="flex flex-col flex-1">
-                            <div className='flex items-center mb-2'>
-                                <TextField
-                                    id="order_type_code"
-                                    size="small"
-                                    select
-                                    fullWidth
-                                    variant="standard"
-                                    onChange={addWorkflowFormik?.handleChange}
-                                    onBlur={addWorkflowFormik?.handleBlur}
-                                    value={addWorkflowFormik?.values?.order_type_code}
-                                    name="order_type_code"
-                                    label="Tipo de Pedido"
-                                >
-                                    {ortferTypes?.data?.map((option: any) => (
-                                        <MenuItem key={option.id} value={option.code}>
-                                            {option.designation}
-                                        </MenuItem>
-                                    ))}
-                                </TextField>
-                            </div>
-                        </div>
-                        <div className="flex items-center">
-                            <Button className="text-white bg-blue-500" onClick={() => { setView("list") }}>
-                                <PlusIcon />
-                                LISTAR
-                            </Button>
-                        </div>
-                    </div>
+                    <MuiAutocompleteSelect
+                        Icon={<List />}
+                        options={orderTypes?.data || []}
+                        value={formik?.values?.order_type_code}
+                        onChange={handleOrderTypeChange}
+                        onChangeFormik={formik.setFieldValue}
+                        fieldName="order_type_code"
+                        label="Tipo de Pedido"
+                        buttonLabel='LISTAR'
+                        onButtonClick={() => setView(View.LIST)}
+                    />
 
-                    <AddWorkFlow formik={addWorkflowFormik} isPending={isPending} />
+                    <AddWorkFlow formik={formik} isPending={isPending || isUpdating} isEditMode={view === View?.EDIT} />
                 </>
             )}
         </>
-    )
-}
+    );
+};
 
-export default WorkflowComp
+export default WorkflowComp;
