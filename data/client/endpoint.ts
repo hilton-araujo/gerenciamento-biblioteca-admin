@@ -7,6 +7,7 @@ export const API_ENDPOINTS = {
     GET_WORKFLOW: "/workflow",
     GET_EMPLOYEES: "/employee",
     GET_STAGE: "/stage",
+    GET_TASK: "/task",
 
     //Enums
     GET_ORDER_TYPE: "/order-type",
@@ -24,6 +25,7 @@ export const API_ENDPOINTS = {
     ADD_CLIENT: `/client`,
     ADD_WORKFLOW: `/workflow`,
     ADD_STAGE: `/stage`,
+    ADD_TASK_COLABORATOR: `/task`,
 
     //PUT
     EDI_CATEGORY: `/category`,
@@ -31,5 +33,6 @@ export const API_ENDPOINTS = {
     EDIT_BOOK: `/book`,
     UPDATE_WORKFLOW: `/workflow`,
     UPDATE_STAGE: `/stage`,
+    UPDATE_TASK_COLABORATOR: `/task`,
 
 }
