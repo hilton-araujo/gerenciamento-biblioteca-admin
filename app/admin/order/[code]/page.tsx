@@ -1,14 +1,75 @@
-import Link from "next/link"
-import { Button } from "@/components//shared/ui/button"
-import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components//shared/ui/card"
-// import { Badge } from "@/components/shared/ui/badge"
-import { ArrowLeft, Check, Users, X } from "lucide-react"
-import { Separator } from "@/components/shared//ui/separator"
-import { PageHeader } from "@/components/app-header"
+"use client"
 
-export default function PedidoDetalhesPage({ params }: { params: { code: string } }) {
+import type React from "react"
+
+import { useState } from "react"
+import Link from "next/link"
+import { Button } from "@/components/shared/ui/button"
+import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/shared/ui/card"
+import { ArrowLeft, Check, Users, X } from "lucide-react"
+import { Separator } from "@/components/shared/ui/separator"
+import { Badge } from "@/components/shared/ui/badge"
+import { toast } from "@/hooks/use-toast"
+
+// Types for our data model
+type BookStatus = "pendente" | "aprovado" | "rejeitado"
+type OrderStatus = "pendente" | "aprovado" | "rejeitado" | "parcial"
+
+interface Book {
+    id: string
+    titulo: string
+    autor: string
+    status: BookStatus
+}
+
+interface Customer {
+    id: string
+    nome: string
+    email: string
+    telefone: string
+}
+
+interface Order {
+    id: string
+    cliente: Customer
+    data: string
+    status: OrderStatus
+    livros: Book[]
+}
+
+// Component for the page header
+const PageHeader = ({
+    title,
+    description,
+    icon: Icon,
+    backUrl,
+}: {
+    title: string
+    description: string
+    icon: React.ElementType
+    backUrl: string
+}) => (
+    <div className="flex flex-col gap-1 pb-6">
+        <div className="flex items-center gap-2">
+            <Link
+                href={backUrl}
+                className="inline-flex items-center justify-center text-sm font-medium transition-colors rounded-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none ring-offset-background hover:bg-accent hover:text-accent-foreground h-9 w-9"
+            >
+                <ArrowLeft className="w-4 h-4" />
+                <span className="sr-only">Voltar</span>
+            </Link>
+            <h1 className="flex items-center gap-2 text-2xl font-bold tracking-tight">
+                {Icon && <Icon className="w-6 h-6" />}
+                {title}
+            </h1>
+        </div>
+        {description && <p className="text-muted-foreground">{description}</p>}
+    </div>
+)
+
+export default function OrderDetailsPage({ params }: { params: { code: string } }) {
     // Em uma aplicação real, buscaríamos os dados do banco de dados
-    const pedido = {
+    const initialOrder: Order = {
         id: params.code,
         cliente: {
             id: "CLI-001",
@@ -23,7 +84,7 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                 id: "LIV-001",
                 titulo: "Dom Casmurro",
                 autor: "Machado de Assis",
-                status: "pendente",
+                status: "aprovado",
             },
             {
                 id: "LIV-002",
@@ -35,13 +96,16 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                 id: "LIV-003",
                 titulo: "Memórias Póstumas de Brás Cubas",
                 autor: "Machado de Assis",
-                status: "pendente",
+                status: "rejeitado",
             },
         ],
     }
 
+    // Estado para gerenciar os dados do pedido
+    const [pedido, setPedido] = useState<Order>(initialOrder)
+
     // Função para determinar a cor do badge de status
-    const getStatusColor = (status: string) => {
+    const getStatusColor = (status: BookStatus | OrderStatus) => {
         switch (status) {
             case "pendente":
                 return "bg-yellow-500 hover:bg-yellow-600"
@@ -49,13 +113,15 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                 return "bg-green-500 hover:bg-green-600"
             case "rejeitado":
                 return "bg-red-500 hover:bg-red-600"
+            case "parcial":
+                return "bg-blue-500 hover:bg-blue-600"
             default:
                 return "bg-gray-500 hover:bg-gray-600"
         }
     }
 
     // Função para traduzir o status
-    const getStatusText = (status: string) => {
+    const getStatusText = (status: BookStatus | OrderStatus) => {
         switch (status) {
             case "pendente":
                 return "Pendente"
@@ -63,9 +129,66 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                 return "Aprovado"
             case "rejeitado":
                 return "Rejeitado"
+            case "parcial":
+                return "Parcialmente Aprovado"
             default:
                 return status
         }
+    }
+
+    // Função para atualizar o status de um livro
+    const updateBookStatus = (bookId: string, newStatus: BookStatus) => {
+        const updatedBooks = pedido.livros.map((livro) => (livro.id === bookId ? { ...livro, status: newStatus } : livro))
+
+        // Atualiza os livros e recalcula o status geral do pedido
+        setPedido((prev) => {
+            const updatedOrder = { ...prev, livros: updatedBooks }
+            updatedOrder.status = calculateOrderStatus(updatedBooks)
+            return updatedOrder
+        })
+
+        toast({
+            title: `Livro ${newStatus === "aprovado" ? "aprovado" : "rejeitado"} com sucesso`,
+            description: `O status do livro foi atualizado para ${getStatusText(newStatus)}.`,
+        })
+    }
+
+    // Função para calcular o status geral do pedido com base nos livros
+    const calculateOrderStatus = (books: Book[]): OrderStatus => {
+        const approvedCount = books.filter((book) => book.status === "aprovado").length
+        const rejectedCount = books.filter((book) => book.status === "rejeitado").length
+        const totalBooks = books.length
+
+        if (approvedCount === totalBooks) return "aprovado"
+        if (rejectedCount === totalBooks) return "rejeitado"
+        if (approvedCount > 0 || rejectedCount > 0) return "parcial"
+        return "pendente"
+    }
+
+    // Função para aprovar ou rejeitar todos os livros
+    const updateAllBooks = (newStatus: BookStatus) => {
+        const updatedBooks = pedido.livros.map((livro) => ({ ...livro, status: newStatus }))
+
+        setPedido((prev) => ({
+            ...prev,
+            livros: updatedBooks,
+            status: newStatus === "aprovado" ? "aprovado" : "rejeitado",
+        }))
+
+        toast({
+            title: `Todos os livros foram ${newStatus === "aprovado" ? "aprovados" : "rejeitados"}`,
+            description: `O status de todos os livros foi atualizado para ${getStatusText(newStatus)}.`,
+        })
+    }
+
+    // Função para atualizar o status geral do pedido
+    const updateOrderStatus = (newStatus: OrderStatus) => {
+        setPedido((prev) => ({ ...prev, status: newStatus }))
+
+        toast({
+            title: `Pedido ${newStatus === "aprovado" ? "aprovado" : "rejeitado"} com sucesso`,
+            description: `O status do pedido foi atualizado para ${getStatusText(newStatus)}.`,
+        })
     }
 
     return (
@@ -97,7 +220,7 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                                         </div>
                                         <div>
                                             <div className="text-sm font-medium text-muted-foreground">Status</div>
-                                            {/* <Badge className={getStatusColor(pedido.status)}>{getStatusText(pedido.status)}</Badge> */}
+                                            <Badge className={getStatusColor(pedido.status)}>{getStatusText(pedido.status)}</Badge>
                                         </div>
                                     </div>
                                 </CardContent>
@@ -144,22 +267,26 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                                         {pedido.livros.map((livro, index) => (
                                             <div key={livro.id}>
                                                 {index > 0 && <Separator className="my-4" />}
-                                                <div className="flex items-start justify-between">
+                                                <div className="flex flex-col justify-between gap-4 sm:flex-row sm:items-start">
                                                     <div>
                                                         <h3 className="font-medium">{livro.titulo}</h3>
                                                         <p className="text-sm text-muted-foreground">{livro.autor}</p>
                                                         <p className="mt-1 text-sm">
                                                             ID: {livro.id} · Status:
-                                                            {/* <Badge className={`ml-2 ${getStatusColor(livro.status)}`}>
-                            {getStatusText(livro.status)}
-                          </Badge> */}
+                                                            <Badge className={`ml-2 ${getStatusColor(livro.status)}`}>
+                                                                {getStatusText(livro.status)}
+                                                            </Badge>
                                                         </p>
                                                     </div>
-                                                    <div className="flex space-x-2">
+                                                    <div className="flex self-end space-x-2 sm:self-start">
                                                         <Button
                                                             variant="outline"
                                                             size="sm"
-                                                            className="text-green-500 border-green-500 hover:bg-green-500 hover:text-white"
+                                                            className={`${livro.status === "aprovado"
+                                                                    ? "bg-green-500 text-white"
+                                                                    : "text-green-500 border-green-500 hover:bg-green-500 hover:text-white"
+                                                                }`}
+                                                            onClick={() => updateBookStatus(livro.id, "aprovado")}
                                                         >
                                                             <Check className="w-4 h-4 mr-1" />
                                                             Aprovar
@@ -167,7 +294,11 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                                                         <Button
                                                             variant="outline"
                                                             size="sm"
-                                                            className="text-red-500 border-red-500 hover:bg-red-500 hover:text-white"
+                                                            className={`${livro.status === "rejeitado"
+                                                                    ? "bg-red-500 text-white"
+                                                                    : "text-red-500 border-red-500 hover:bg-red-500 hover:text-white"
+                                                                }`}
+                                                            onClick={() => updateBookStatus(livro.id, "rejeitado")}
                                                         >
                                                             <X className="w-4 h-4 mr-1" />
                                                             Rejeitar
@@ -178,9 +309,13 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                                         ))}
                                     </div>
                                 </CardContent>
-                                <CardFooter className="flex justify-between">
-                                    <Button variant="outline">Rejeitar Todos</Button>
-                                    <Button>Aprovar Todos</Button>
+                                <CardFooter className="flex flex-col justify-between gap-2 sm:flex-row">
+                                    <Button variant="outline" onClick={() => updateAllBooks("rejeitado")} className="w-full sm:w-auto">
+                                        Rejeitar Todos
+                                    </Button>
+                                    <Button onClick={() => updateAllBooks("aprovado")} className="w-full sm:w-auto">
+                                        Aprovar Todos
+                                    </Button>
                                 </CardFooter>
                             </Card>
 
@@ -190,15 +325,19 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
                                 </CardHeader>
                                 <CardContent>
                                     <p className="mb-4 text-sm text-muted-foreground">
-                                        Após avaliar todos os livros, atualize o status geral do pedido. O status pode ser atualizado
-                                        automaticamente com base nas decisões individuais.
+                                        Após avaliar todos os livros, atualize o status geral do pedido. O status atual é calculado
+                                        automaticamente com base nas decisões individuais, mas você pode alterá-lo manualmente.
                                     </p>
-                                    <div className="grid grid-cols-2 gap-4">
-                                        <Button variant="outline" className="text-red-500 border-red-500 hover:bg-red-500 hover:text-white">
+                                    <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
+                                        <Button
+                                            variant="outline"
+                                            className="text-red-500 border-red-500 hover:bg-red-500 hover:text-white"
+                                            onClick={() => updateOrderStatus("rejeitado")}
+                                        >
                                             <X className="w-4 h-4 mr-2" />
                                             Rejeitar Pedido
                                         </Button>
-                                        <Button className="bg-green-500 hover:bg-green-600">
+                                        <Button className="bg-green-500 hover:bg-green-600" onClick={() => updateOrderStatus("aprovado")}>
                                             <Check className="w-4 h-4 mr-2" />
                                             Aprovar Pedido
                                         </Button>
@@ -212,3 +351,4 @@ export default function PedidoDetalhesPage({ params }: { params: { code: string 
         </div>
     )
 }
+
