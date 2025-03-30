@@ -54,7 +54,8 @@ const ListClient = ({ clients, isLoading }: Props) => {
                         isLoading={isLoading}
                         actions={(client) => (
                             <div className="flex items-end justify-end gap-2">
-                                <IconButton className="text-green-500 hover:text-green-700">
+                                <IconButton className="text-green-500 hover:text-green-700"
+                                    onClick={() => navigate.push(`/admin/client/${client.nuit}/details`)}>
                                     <Eye size={18} />
                                 </IconButton>
                                 <IconButton
