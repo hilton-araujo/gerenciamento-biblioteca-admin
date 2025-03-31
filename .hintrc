@@ -1,16 +1,25 @@
 {
-    "extends": [
-      "development"
+  "extends": [
+    "development"
+  ],
+  "hints": {
+    "axe/forms": "off",
+    "no-inline-styles": "off",
+    "axe/parsing": [
+      "default",
+      {
+        "duplicate-id-active": "off"
+      }
     ],
-    "hints": {
-      "axe/forms": "off",
-      "no-inline-styles": "off",
-      "axe/parsing": [
-        "default",
-        {
-          "duplicate-id-active": "off"
-        }
-      ],
-      "axe/name-role-value": "off"
-    }
+    "axe/name-role-value": "off",
+    "compat-api/css": [
+      "default",
+      {
+        "ignore": [
+          "-webkit-text-size-adjust",
+          "user-select"
+        ]
+      }
+    ]
   }
+}
