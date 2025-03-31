@@ -1,13 +1,23 @@
 "use client"
-import { useState, useEffect, JSX } from "react"
+import { useState, useEffect, type JSX } from "react"
+import type React from "react"
+
 import Autocomplete from "@mui/material/Autocomplete"
 import TextField from "@mui/material/TextField"
 import Box from "@mui/material/Box"
 import Paper from "@mui/material/Paper"
 import { Button } from "./button"
 
+interface Option {
+    [key: string]: any
+    name?: string
+    value?: string
+    code?: string
+    designation?: string
+}
+
 interface MuiAutocompleteSelectProps {
-    options: any[]
+    options: Option[]
     value: string
     onChange: (value: string) => void
     onChangeFormik?: (field: string, value: string) => void
@@ -19,6 +29,8 @@ interface MuiAutocompleteSelectProps {
     onButtonClick?: () => void
     className?: string
     Icon: JSX.Element
+    valueField?: string
+    labelField?: string
 }
 
 export function MuiAutocompleteSelect({
@@ -33,25 +45,30 @@ export function MuiAutocompleteSelect({
     buttonLabel = "CRIAR NOVO",
     onButtonClick,
     className,
-    Icon
+    Icon,
+    valueField = "code",
+    labelField = "designation",
 }: MuiAutocompleteSelectProps) {
-    const [selectedOption, setSelectedOption] = useState<any | null>(null)
+    const [selectedOption, setSelectedOption] = useState<Option | null>(null)
+
+    const actualValueField = options?.[0]?.value !== undefined ? "value" : valueField
+    const actualLabelField = options?.[0]?.name !== undefined ? "name" : labelField
 
     useEffect(() => {
-        const selected = options?.find(option => option?.code === value);
-        setSelectedOption(selected || null);
-    }, [value, options]);
+        const selected = options?.find((option) => option[actualValueField] === value)
+        setSelectedOption(selected || null)
+    }, [value, options, actualValueField])
 
-    const handleChange = (_event: React.SyntheticEvent, newValue: any | null) => {
+    const handleChange = (_event: React.SyntheticEvent, newValue: Option | null) => {
         if (newValue) {
-            onChange(newValue.code);
+            onChange(newValue[actualValueField])
             if (onChangeFormik && fieldName) {
-                onChangeFormik(fieldName, newValue.code);
+                onChangeFormik(fieldName, newValue[actualValueField])
             }
         } else {
-            onChange("");
+            onChange("")
             if (onChangeFormik && fieldName) {
-                onChangeFormik(fieldName, "");
+                onChangeFormik(fieldName, "")
             }
         }
     }
@@ -60,13 +77,13 @@ export function MuiAutocompleteSelect({
         <Paper
             elevation={0}
             sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'center',
+                display: "flex",
+                flexDirection: "row",
+                alignItems: "center",
                 gap: 1,
                 p: 1,
-                bgcolor: 'grey.100',
-                borderRadius: 1
+                bgcolor: "grey.100",
+                borderRadius: 1,
             }}
             className={className}
         >
@@ -75,24 +92,16 @@ export function MuiAutocompleteSelect({
                     options={options}
                     value={selectedOption}
                     onChange={handleChange}
-                    getOptionLabel={(option) => option.designation}
+                    getOptionLabel={(option) => option[actualLabelField] || ""}
                     renderInput={(params) => (
-                        <TextField
-                            {...params}
-                            label={label}
-                            variant="standard"
-                            placeholder={placeholder}
-                            fullWidth
-                        />
+                        <TextField {...params} label={label} variant="standard" placeholder={placeholder} fullWidth />
                     )}
                     noOptionsText={emptyMessage}
-                    isOptionEqualToValue={(option, value) => option.id === value.id}
+                    isOptionEqualToValue={(option, value) => option[actualValueField] === value[actualValueField]}
                 />
             </Box>
             {onButtonClick && (
-                <Button
-                    onClick={onButtonClick}
-                >
+                <Button onClick={onButtonClick}>
                     {Icon}
                     {buttonLabel}
                 </Button>
