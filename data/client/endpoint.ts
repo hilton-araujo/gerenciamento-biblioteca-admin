@@ -8,9 +8,10 @@ export const API_ENDPOINTS = {
     GET_EMPLOYEES: "/employee",
     GET_STAGE: "/stage",
     GET_TASK: "/task",
+    GET_ORDER_TYPE: "/order-type",
 
     //Enums
-    GET_ORDER_TYPE: "/order-type",
+    GET_ENUM_ORDER_TYPE: "/enums/order-type",
     DOCUMENTS_TYPES: "/enums/document-type",
 
     //GET COM PARAMETROS
@@ -26,6 +27,7 @@ export const API_ENDPOINTS = {
     ADD_WORKFLOW: `/workflow`,
     ADD_STAGE: `/stage`,
     ADD_TASK_COLABORATOR: `/task`,
+    ADD_ORDER_TYPE: `/order-type`,
 
     //PUT
     EDI_CATEGORY: `/category`,
