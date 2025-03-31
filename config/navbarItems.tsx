@@ -2,6 +2,7 @@ import {
     Book,
     FolderOpen,
     Home,
+    List,
     ListOrdered,
     Plus,
     Users,
@@ -32,6 +33,11 @@ export const navbarConfig = [
         title: "Livro",
         href: "/admin/book",
         icon: <Book className="w-5 h-5" />,
+    },
+    {
+        title: "Tipo de Pedido",
+        href: "/admin/order-type",
+        icon: <List className="w-5 h-5" />,
     },
     {
         title: "Pedido",
