@@ -11,6 +11,7 @@ import * as Yup from 'yup'
 import { CardContent } from '@/components/shared/ui/card'
 import { generateFieldProps } from '@/components/shared/generateFieldProps'
 import { Button } from '@/components/shared/ui/button'
+import { Enum } from '@/model/enum'
 
 const EmployeeForm = () => {
     const navigate = useRouter()
@@ -78,8 +79,10 @@ const EmployeeForm = () => {
     const { data } = useGet({
         endpoint: API_ENDPOINTS.DOCUMENTS_TYPES
     })
-    console.log("addEmployeeFormik", addEmployeeFormik?.values);
-    console.log("errors", addEmployeeFormik?.errors);
+
+    const { data: genre } = useGet({
+        endpoint: API_ENDPOINTS.GET_GENRES
+    })
 
     return (
         <div className="grid w-full lg:gap-8">
@@ -95,7 +98,13 @@ const EmployeeForm = () => {
                                 </div>
 
                                 <div className="flex flex-row gap-3">
-                                    <TextField {...generateFieldProps(addEmployeeFormik, 'genre', 'Genero', 'Digite o genero do cliente', 'text')} />
+                                    <TextField {...generateFieldProps(addEmployeeFormik, 'genre', 'Genero', 'Digite o genero do cliente', 'text')} select >
+                                        {genre?.map((item: Enum) => (
+                                            <MenuItem key={item.value} value={item.value}>
+                                                {item?.name}
+                                            </MenuItem>
+                                        ))}
+                                    </TextField>
 
                                     <TextField {...generateFieldProps(addEmployeeFormik, 'nuit', 'Nuit', 'Digite o NUIT do cliente')} />
 
