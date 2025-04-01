@@ -13,6 +13,7 @@ export const API_ENDPOINTS = {
     //Enums
     GET_ENUM_ORDER_TYPE: "/enums/order-type",
     DOCUMENTS_TYPES: "/enums/document-type",
+    GET_GENRES: "/enums/genders",
 
     //GET COM PARAMETROS
     GET_BOOK_BY_ID: (id: string) => `/book/${id}`,
